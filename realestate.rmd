@@ -25,23 +25,22 @@ output:
 ```{r}
 # Bara að gera setup ef það þarf
 if(!exists("dt.RE_data")){ source("setUp.R")}
+source("utilz.R")
 
 #ggpairs(dt.RE_data)
-
-summary(lm1 <- lm(nuvirdi ~ ., data = dt.RE_data))
+lm1 <- lm(nuvirdi ~ ., data = dt.RE_data)
+summary(lm1)
 slm1 <- step(lm1)
 summary(slm1)
 slm1$anova
 
-help(step)
 n<-dim(dt.RE_data)[1]
 
+# Training and testing data sets
 set.seed(5)
 rows<-sample(1:n,n/3)
-test<-data.table(dt.RE_data[rows,])
-dim(test)
-train<-data.table(dt.RE_data[-rows,])
-dim(train)
+train <- makeSubSet(dt.RE_data, -rows)
+test <- makeSubSet(dt.RE_data, rows)
 
 kdagur <- train$kdagur         
 nuvirdi <- train$nuvirdi        
@@ -61,9 +60,6 @@ fjstof  <- train$fjstof
 fjgeym  <- train$fjgeym     
 stig10  <- train$stig10   
 ibteg <- as.factor(train$ibteg) 
-
-
-
 
 lm.all <- lm(nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg, data = train)
 
