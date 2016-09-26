@@ -1,0 +1,179 @@
+--- 
+title: "Verkefni 5"
+author: Ottó Hólm Reynisson
+date: 15.september 2016
+subject: null
+header-includes: 
+   - \usepackage{longtable} 
+   - \usepackage{graphics} 
+   - \usepackage[icelandic]{babel} 
+   - \usepackage{tabularx} 
+   - \usepackage{booktabs,colortbl,xcolor} 
+output: 
+  pdf_document: 
+    number_sections: no 
+    toc: no 
+    toc_depth: 2 
+    fig_caption: yes 
+  html_document: 
+    self_contained: yes 
+  word_document: 
+    toc: yes 
+    toc_depth: '2' 
+---
+
+```{r}
+
+library(ggplot2)
+library(plyr)
+library(faraway)
+library(car)
+library(gridExtra) 
+library(MASS)
+library(data.table)
+library(GGally)
+
+setwd("C:/Users/ottohr/Desktop/HÍ/Master/Hagnýt línuleg tölfræðilíkön/Skilaverkefni 5")
+verdmat <-read.table("gagnasafn_endurmat2017_litid.csv", sep=',', header=T)
+RE_data <- data.frame(verdmat)
+dt.re <- data.table(verdmat)
+#Matsv:
+#  Vesturb. 11
+#  miðbær s þ 31
+#  hlíðar 80
+#  grafarvogur 120
+#  seljahverfi 150
+
+dt.verdmat <- data.table(verdmat)
+dt.RE_data <- dt.verdmat[matssvaedi %in% c(11,31,80,120,150)]
+dt.RE_data <- dt.RE_data[,k.ar:=substring(kdagur,1,4)]
+
+
+```
+ 
+Byrjum á að taka út þær breytur sem við teljum ekki  
+ 
+```{r}
+
+
+dt.RE_data <- subset(dt.RE_data, select=c("kdagur","nuvirdi","teg_eign","byggar","haednr","lyfta","ibm2","fjhaed",
+                                      "fjbilast","fjbkar","fjsturt","fjklos","fjeld","fjherb",
+                                      "fjstof","fjgeym","stig10","ibteg"))
+
+dt.RE_data <- dt.RE_data[,kdagur:=as.Date(kdagur)]
+
+#breyta lyftu í boolean og breyta ibteg í factor, 11=serbýli, 12=fjölbýli
+
+#for(i in 1:n){
+#  if(dt.RE_data$lyfta[i]!=0){dt.RE_data$lyfta[i]=1}
+#  else{}
+#}
+
+for(i in 1:nrow(dt.RE_data)){
+  if(dt.RE_data$ibteg[i]==11){dt.RE_data$ibteg="Sérbýli"}
+  else{dt.RE_data$ibteg[i]="Fjölbýli"}
+}
+
+#ggpairs(dt.RE_data)
+
+summary(lm1 <- lm(nuvirdi ~ ., data = dt.RE_data))
+slm1 <- step(lm1)
+summary(slm1)
+slm1$anova
+
+
+n<-dim(dt.RE_data)[1]
+
+set.seed(5)
+rows<-sample(1:n,n/3)
+test<-data.table(dt.RE_data[rows,])
+dim(test)
+train<-data.table(dt.RE_data[-rows,])
+dim(train)
+
+kdagur <- train$kdagur         
+nuvirdi <- train$nuvirdi        
+teg_eign <- as.factor(train$teg_eign)      
+byggar <- train$byggar         
+haednr <- train$haednr        
+lyfta <- train$lyfta       
+ibm2  <- train$ibm2         
+fjhaed <- train$fjhaed    
+fjbilast  <- train$fjbilast    
+fjbkar  <- train$fjbkar
+fjsturt <- train$fjsturt
+fjklos  <- train$fjklos 
+fjeld  <- train$fjeld    
+fjherb  <- train$fjherb
+fjstof  <- train$fjstof    
+fjgeym  <- train$fjgeym     
+stig10  <- train$stig10   
+ibteg <- as.factor(train$ibteg) 
+
+
+
+
+lm.all <- lm(nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg, data = train)
+
+summary(lm.all)
+
+#Call:
+#lm(formula = nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + 
+#    fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + 
+#    fjstof + fjgeym + stig10 + ibteg, data = train)
+#
+#Residuals:
+#   Min     1Q Median     3Q    Max 
+#-30737  -4584   -399   3705 113946 
+
+#Coefficients:
+#                    Estimate Std. Error t value Pr(>|t|)    
+#(Intercept)        293911.47   45342.10   6.482 1.23e-10 ***
+#teg_eignIbudareign -11194.68    1090.53 -10.265  < 2e-16 ***
+#teg_eignParhus      -5620.75    1698.00  -3.310 0.000955 ***
+#teg_eignRadhus      -9691.17    1147.17  -8.448  < 2e-16 ***
+#byggar               -156.46      12.62 -12.400  < 2e-16 ***
+#haednr                314.71     187.87   1.675 0.094111 .  
+#lyfta                3809.14     540.88   7.042 2.89e-12 ***
+#ibm2                  217.23      11.78  18.442  < 2e-16 ***
+#fjhaed              -4190.36     678.61  -6.175 8.55e-10 ***
+#fjbilast             -734.70     748.03  -0.982 0.326175    
+#fjbkar               1523.20     695.37   2.190 0.028645 *  
+#fjsturt               513.50     562.29   0.913 0.361272    
+#fjklos               1182.28     766.01   1.543 0.122943    
+#fjeld               -1352.79    1381.92  -0.979 0.327780    
+#fjherb                 21.90     287.69   0.076 0.939323    
+#fjstof               1420.22     430.52   3.299 0.000994 ***
+#fjgeym                -22.28     357.62  -0.062 0.950331    
+#stig10               3238.86    3758.53   0.862 0.388974    
+#ibtegSérbýli        -4911.56    4971.94  -0.988 0.323386    
+#---
+#Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+#Residual standard error: 8568 on 1467 degrees of freedom
+#Multiple R-squared:  0.7088,	Adjusted R-squared:  0.7052 
+#F-statistic: 198.3 on 18 and 1467 DF,  p-value: < 2.2e-16
+
+### Getum við því hent út 
+#fjbilast, 
+#fjsturt, 
+#fjeld, 
+#fjherb, 
+#fjgeym ,
+#stig10, 
+#ibtegSerbyli?
+
+lm.nytt<- lm(nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed  + fjbkar + fjklos + fjstof, data = train)
+
+summary(lm.nytt)
+
+
+diag.all <- fortify(lm.all)
+
+lm.prufa <- lm(nuvirdi ~ teg_eign + byggar + lyfta + ibm2 + fjhaed + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + ibteg, data = train)
+
+summary(lm.prufa)
+
+diag.prufa <- fortify(lm.prufa)
+```
+

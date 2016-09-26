@@ -1,0 +1,51 @@
+---
+title: "Hagnýt bayesísk tölfræði - verkefni 2"
+author: "Árni Víðir Jóhannesson"
+date: "22.september 2016"
+output:
+  pdf_document:
+    fig_caption: yes
+    number_sections: no
+    toc: no
+    toc_depth: 2
+  html_document:
+    self_contained: yes
+  word_document:
+    toc: yes
+    toc_depth: '2'
+subject: null
+header-includes:
+- \usepackage{longtable}
+- \usepackage{graphics}
+- \usepackage[icelandic]{babel}
+- \usepackage{tabularx}
+- \usepackage{booktabs,colortbl,xcolor}
+- \usepackage{amsmath}
+- \usepackage{bigints}
+- \usepackage{relsize}
+---
+
+
+
+```{r}
+RE_data <- read.csv(file="gagnasafn_endurmat2017_litid.csv",head=TRUE,sep=",");
+
+vesturb <- 11
+midb <- 31
+hlid <- 80
+grafarv <- 120
+seljahv <- 150
+matsv <- RE_data$matssvaedi
+data <- RE_data[matsv == vesturb | matsv == midb | matsv == hlid | matsv == grafarv | matsv == seljahv,]
+
+
+
+set.seed(1)
+# Used to train the data set
+trainSet <- data[sort(sample(nrow(data), 2*nrow(data)/3)), ]
+# Used to test the data set
+testRows <- data[-sort(sample(nrow(data), 2*nrow(data)/3)),]
+
+
+```
+
