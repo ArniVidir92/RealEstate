@@ -1,5 +1,5 @@
 # Þessi skrá sér um að fjarlægja þá dálka sem við þurfum ekki í módelinu
-
+library(MASS)
 library(ggplot2)
 library(plyr)
 library(faraway)

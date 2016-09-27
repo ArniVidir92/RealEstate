@@ -30,11 +30,6 @@ source("outliers.R")
 source("testArni.R")
 
 #ggpairs(dt.RE_data)
-lm1 <- lm(nuvirdi ~ ., data = dt.RE_data)
-summary(lm1)
-slm1 <- step(lm1)
-summary(slm1)
-slm1$anova
 
 n<-dim(dt.RE_data)[1]
 
@@ -62,16 +57,54 @@ fjstof  <- train$fjstof
 fjgeym  <- train$fjgeym     
 stig10  <- train$stig10   
 ibteg <- as.factor(train$ibteg) 
+k.ar <- train$k.ar
 
-lm.all <- lm(nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg, data = train)
-#summary(lm.all)
+lm.all <- lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar, data = train)
+names(summary(lm.all)$terms[2])
+
+train2 <- subset(train, select=c("nuvirdi","kdagur","teg_eign","byggar","haednr","lyfta","ibm2","fjhaed",
+                                          "fjbilast","fjbkar","fjsturt","fjklos","fjeld","fjherb",
+                                          "fjstof","fjgeym","stig10","ibteg","k.ar"))
+lm.all2 <- lm(nuvirdi ~ ., data = train2)
+summary(lm.all2)
+summary(lm.all)
+
 ```
 
 
 ```{r}
 ###################################### R squared adjusted fyrir lm.all
-Radj.all <- CalculateRadjusted(lm.all, test)
+Radj.all <- CalculateRadjusted(lm.all, test) # 0.7436628
 ```
+
+```{r}
+#################################### lm.allNoOutliers Here I take out all outliers and get a new model
+lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
+Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) #0.7328961
+```
+
+```{r}
+#################################### lm.allNoInfluential Here I take out all influential points and get a new model
+lm.allNoInfluential <- removeInfluential(lm.all,maxCookDistance = 4/n)
+Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test) #0.7327364
+```
+
+```{r}
+#################################### prófa boxcox til að transforma response breytunni (nuvirdi)
+# Start by transforming the training and test datasets
+bc <- boxcox(lm.all)
+lambda.all <- with(bc, x[which.max(y)])
+
+trainTransf <- train
+testTransf <- test
+trainTransf$nuvirdi <- yjPower(train$nuvirdi, lambda.all)
+testTransf$nuvirdi <- yjPower(test$nuvirdi, lambda.all)
+
+lm.allYTransformed <- lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar, data = trainTransf)
+
+Radj.allYTransformed <- CalculateRadjusted(lm.allYTransformed, testTransf) # 0.7890585
+```
+
 
 ```{r}
 ######################  Föll fyrir residuals og annað er í outliers.R skránni  ######
@@ -80,13 +113,31 @@ Radj.all <- CalculateRadjusted(lm.all, test)
 indexPlotResiduals(lm.all)
 indexPlotJackResiduals(lm.all)
 indexPlotLeverage(lm.all)
+indexPlotStResiduals(lm.all)
 # blue dots have high residuals and green have high leverage
 indexPlotCookdistance(lm.all)
+
 ```
 
 ```{r}
-####################### Remove outliers #############################################
-diag <- data.table(fortify(model))
+##################### Trying to use step forward and backwards #########################
+# With outliers and influential points
+slm.allBack <- step(lm.all)
+slm.allForw <- step(lm.all,direction = "forward")
+Radj.stepBackwards <- CalculateRadjusted(slm.allBack, test) # 0.7469181
+Radj.stepForwards <- CalculateRadjusted(slm.allForw, test) # 0.7436628
+
+# Without outliers
+slm.allBackNoOutliers <- step(lm.allNoOutlier)
+slm.allForwNoOutliers <- step(lm.allNoOutlier,direction = "forward")
+Radj.stepBackNoOutliers <- CalculateRadjusted(slm.allBackNoOutliers, test) # 0.7335344
+Radj.stepForwNoOutliers <- CalculateRadjusted(slm.allForwNoOutliers, test) # 0.7328961
+
+# Without influential points
+slm.allBackNoInfl <- step(lm.allNoInfluential)
+slm.allForwNoInfl <- step(lm.allNoInfluential,direction = "forward")
+Radj.stepBackNoInfl <- CalculateRadjusted(slm.allBackNoInfl, test) # 0.73425
+Radj.stepForwNoInfl <- CalculateRadjusted(slm.allForwNoInfl, test) # 0.7327364
 ```
 
 

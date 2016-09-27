@@ -92,9 +92,58 @@ removeOutliersAndReturnNewModel <- function(model,alpha){
   
 }
 
-removeOutliersWStdResMoreThanThree <- function(model, dt){
+removeOutliersWStdResMoreThanThree <- function(model){
   diag <- data.table(fortify(model))
-  diag$.index <- c(1:length(diag$.resid))
-  rowsWithOutliers <- diag[,]
-  
+  rowsWithNoOutliers <- diag[abs(diag$.stdresid) < 3,]
+  kdagur <- rowsWithNoOutliers$kdagur         
+  nuvirdi <- rowsWithNoOutliers$nuvirdi        
+  teg_eign <- as.factor(rowsWithNoOutliers$teg_eign)      
+  byggar <- rowsWithNoOutliers$byggar         
+  haednr <- rowsWithNoOutliers$haednr        
+  lyfta <- rowsWithNoOutliers$lyfta       
+  ibm2  <- rowsWithNoOutliers$ibm2         
+  fjhaed <- rowsWithNoOutliers$fjhaed    
+  fjbilast  <- rowsWithNoOutliers$fjbilast    
+  fjbkar  <- rowsWithNoOutliers$fjbkar
+  fjsturt <- rowsWithNoOutliers$fjsturt
+  fjklos  <- rowsWithNoOutliers$fjklos 
+  fjeld  <- rowsWithNoOutliers$fjeld    
+  fjherb  <- rowsWithNoOutliers$fjherb
+  fjstof  <- rowsWithNoOutliers$fjstof    
+  fjgeym  <- rowsWithNoOutliers$fjgeym     
+  stig10  <- rowsWithNoOutliers$stig10   
+  ibteg <- as.factor(rowsWithNoOutliers$ibteg) 
+  k.ar <- rowsWithNoOutliers$k.ar
+  return(
+    lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + 
+         fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar)
+    )
+}
+
+removeInfluential <- function(model, maxCookDistance){
+  diag <- data.table(fortify(model))
+  rowsWithNoInfluentials <- diag[diag$.cooksd < maxCookDistance,]
+  kdagur <- rowsWithNoInfluentials$kdagur         
+  nuvirdi <- rowsWithNoInfluentials$nuvirdi        
+  teg_eign <- as.factor(rowsWithNoInfluentials$teg_eign)      
+  byggar <- rowsWithNoInfluentials$byggar         
+  haednr <- rowsWithNoInfluentials$haednr        
+  lyfta <- rowsWithNoInfluentials$lyfta       
+  ibm2  <- rowsWithNoInfluentials$ibm2         
+  fjhaed <- rowsWithNoInfluentials$fjhaed    
+  fjbilast  <- rowsWithNoInfluentials$fjbilast    
+  fjbkar  <- rowsWithNoInfluentials$fjbkar
+  fjsturt <- rowsWithNoInfluentials$fjsturt
+  fjklos  <- rowsWithNoInfluentials$fjklos 
+  fjeld  <- rowsWithNoInfluentials$fjeld    
+  fjherb  <- rowsWithNoInfluentials$fjherb
+  fjstof  <- rowsWithNoInfluentials$fjstof    
+  fjgeym  <- rowsWithNoInfluentials$fjgeym     
+  stig10  <- rowsWithNoInfluentials$stig10   
+  ibteg <- as.factor(rowsWithNoInfluentials$ibteg) 
+  k.ar <- rowsWithNoInfluentials$k.ar
+  return(
+    lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + 
+         fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar)
+  )
 }
