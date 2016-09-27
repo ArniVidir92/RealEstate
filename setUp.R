@@ -33,10 +33,10 @@ dt.RE_data <- dt.RE_data[,kdagur:=as.Date(kdagur)]
 
 #breyta lyftu í boolean og breyta ibteg í factor, 11=serbýli, 12=fjölbýli
 
-#for(i in 1:n){
-#  if(dt.RE_data$lyfta[i]!=0){dt.RE_data$lyfta[i]=1}
-#  else{}
-#}
+for(i in 1:n){
+  if(dt.RE_data$lyfta[i]!=0){dt.RE_data$lyfta[i]=1}
+  else{}
+}
 
 for(i in 1:nrow(dt.RE_data)){
   if(dt.RE_data$ibteg[i]==11){dt.RE_data$ibteg="Sérbýli"}
