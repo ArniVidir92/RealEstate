@@ -78,7 +78,7 @@ indexPlotStResiduals <- function(model){
 
 indexPlotJackResiduals <- function(model){
   diag <- data.table(fortify(model))
-  diag$.index = c(1:length(diag$.resid))
+  diag$.index <- c(1:length(diag$.resid))
   diag$.jack<-rstudent(model)
   Jack_index<-ggplot(diag, aes(x=seq(1:length(.jack)),y=.jack))+geom_point()
   Jack_index<-Jack_index+geom_hline(yintercept=0, col="red", linetype="dashed")
@@ -89,5 +89,12 @@ indexPlotJackResiduals <- function(model){
 
 removeOutliersAndReturnNewModel <- function(model,alpha){
   diag <- data.table(fortify(model))
+  
+}
+
+removeOutliersWStdResMoreThanThree <- function(model, dt){
+  diag <- data.table(fortify(model))
+  diag$.index <- c(1:length(diag$.resid))
+  rowsWithOutliers <- diag[,]
   
 }
