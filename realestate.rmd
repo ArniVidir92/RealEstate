@@ -26,6 +26,8 @@ output:
 # Bara að gera setup ef það þarf
 if(!exists("dt.RE_data")){ source("setUp.R")}
 source("utilz.R")
+source("outliers.R")
+source("testArni.R")
 
 #ggpairs(dt.RE_data)
 lm1 <- lm(nuvirdi ~ ., data = dt.RE_data)
@@ -62,8 +64,29 @@ stig10  <- train$stig10
 ibteg <- as.factor(train$ibteg) 
 
 lm.all <- lm(nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg, data = train)
+#summary(lm.all)
+```
 
-summary(lm.all)
+
+```{r}
+###################################### R squared adjusted fyrir lm.all
+Radj.all <- CalculateRadjusted(lm.all, test)
+```
+
+```{r}
+######################  Föll fyrir residuals og annað er í outliers.R skránni  ######
+
+# funcions to plot residuals and leverage
+indexPlotResiduals(lm.all)
+indexPlotJackResiduals(lm.all)
+indexPlotLeverage(lm.all)
+# blue dots have high residuals and green have high leverage
+indexPlotCookdistance(lm.all)
+```
+
+```{r}
+
+lm.test <- lm(nuvirdi ~ byggar + haednr)
 
 #Call:
 #lm(formula = nuvirdi ~ teg_eign + byggar + haednr + lyfta + ibm2 + 
