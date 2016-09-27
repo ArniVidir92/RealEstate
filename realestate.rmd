@@ -29,6 +29,7 @@ source("utilz.R")
 source("outliers.R")
 source("testArni.R")
 
+lm.all <- lm(nuvirdi ~ .,data=train)
 #ggpairs(dt.RE_data)
 
 

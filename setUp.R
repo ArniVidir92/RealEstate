@@ -47,9 +47,7 @@ for(i in 1:nrow(dt.RE_data)){
   else{dt.RE_data$ibteg[i]="Fjölbýli"}
 }
 
-
 dt.RE_data <- dt.RE_data[,ibteg:=as.factor(ibteg)]
-
 
 n<-dim(dt.RE_data)[1]
 
