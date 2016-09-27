@@ -41,8 +41,8 @@ n<-dim(dt.RE_data)[1]
 # Training and testing data sets
 set.seed(5)
 rows<-sample(1:n,n/3)
-train <- makeSubSet(dt.RE_data, -rows)
-test <- makeSubSet(dt.RE_data, rows)
+train <- data.table(dt.RE_data[-rows,])
+test <- data.table(dt.RE_data[rows,])
 
 kdagur <- train$kdagur         
 nuvirdi <- train$nuvirdi        
@@ -83,6 +83,12 @@ indexPlotLeverage(lm.all)
 # blue dots have high residuals and green have high leverage
 indexPlotCookdistance(lm.all)
 ```
+
+```{r}
+####################### Remove outliers #############################################
+diag <- data.table(fortify(model))
+```
+
 
 ```{r}
 

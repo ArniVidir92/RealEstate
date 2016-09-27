@@ -87,4 +87,7 @@ indexPlotJackResiduals <- function(model){
   Jack_index
 }
 
-
+removeOutliersAndReturnNewModel <- function(model,alpha){
+  diag <- data.table(fortify(model))
+  
+}
