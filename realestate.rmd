@@ -79,19 +79,19 @@ Radj.all <- CalculateRadjusted(lm.all, test) # 0.7436628
 ```
 
 ```{r}
-#################################### lm.allNoOutliers Here I take out all outliers and get a new model
+#################################### lm.allNoOutliers Here I take out all outliers and get a new model #################
 lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
-Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) #0.7328961
+Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) # 0.7328961
 ```
 
 ```{r}
-#################################### lm.allNoInfluential Here I take out all influential points and get a new model
+#################################### lm.allNoInfluential Here I take out all influential points and get a new model ####
 lm.allNoInfluential <- removeInfluential(lm.all,maxCookDistance = 4/n)
-Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test) #0.7327364
+Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test) # 0.7327364
 ```
 
 ```{r}
-#################################### prófa boxcox til að transforma response breytunni (nuvirdi)
+#################################### prófa boxcox til að transforma response breytunni (nuvirdi) #######################
 # Start by transforming the training and test datasets
 bc <- boxcox(lm.all)
 lambda.all <- with(bc, x[which.max(y)])
