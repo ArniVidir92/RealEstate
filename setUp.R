@@ -25,7 +25,6 @@ dt.RE_data <- dt.verdmat[matssvaedi %in% c(11,31,80,120,150)]
 dt.RE_data <- dt.RE_data[,k.ar:=as.numeric(substring(kdagur,1,4))]
 dt.RE_data <- dt.RE_data[,matssvaedi:=as.factor(matssvaedi)]
 dt.RE_data <- dt.RE_data[,undirmatssvaedi:=as.factor(undirmatssvaedi)]
-#dt.RE_data <- dt.RE_data[,ibteg:=as.factor(ibteg)]
 dt.RE_data <- dt.RE_data[,teg_eign:=as.factor(teg_eign)]
 
 
