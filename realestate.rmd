@@ -31,44 +31,6 @@ source("testArni.R")
 
 #ggpairs(dt.RE_data)
 
-n<-dim(dt.RE_data)[1]
-
-# Training and testing data sets
-set.seed(5)
-rows<-sample(1:n,n/3)
-train <- data.table(dt.RE_data[-rows,])
-test <- data.table(dt.RE_data[rows,])
-
-# Brooks was here, and Red to
-kdagur <- train$kdagur         
-nuvirdi <- train$nuvirdi        
-teg_eign <- as.factor(train$teg_eign)      
-byggar <- train$byggar         
-haednr <- train$haednr        
-lyfta <- train$lyfta       
-ibm2  <- train$ibm2         
-fjhaed <- train$fjhaed    
-fjbilast  <- train$fjbilast    
-fjbkar  <- train$fjbkar
-fjsturt <- train$fjsturt
-fjklos  <- train$fjklos 
-fjeld  <- train$fjeld    
-fjherb  <- train$fjherb
-fjstof  <- train$fjstof    
-fjgeym  <- train$fjgeym     
-stig10  <- train$stig10   
-ibteg <- as.factor(train$ibteg) 
-k.ar <- train$k.ar
-
-lm.all <- lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar, data = train)
-names(summary(lm.all)$terms[2])
-
-train2 <- subset(train, select=c("nuvirdi","kdagur","teg_eign","byggar","haednr","lyfta","ibm2","fjhaed",
-                                          "fjbilast","fjbkar","fjsturt","fjklos","fjeld","fjherb",
-                                          "fjstof","fjgeym","stig10","ibteg","k.ar"))
-lm.all2 <- lm(nuvirdi ~ ., data = train2)
-summary(lm.all2)
-summary(lm.all)
 
 ```
 
@@ -101,7 +63,7 @@ testTransf <- test
 trainTransf$nuvirdi <- yjPower(train$nuvirdi, lambda.all)
 testTransf$nuvirdi <- yjPower(test$nuvirdi, lambda.all)
 
-lm.allYTransformed <- lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar, data = trainTransf)
+lm.allYTransformed <- lm(nuvirdi ~ ., data = trainTransf)
 
 Radj.allYTransformed <- CalculateRadjusted(lm.allYTransformed, testTransf) # 0.7890585
 
