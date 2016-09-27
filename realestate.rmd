@@ -103,6 +103,11 @@ testTransf$nuvirdi <- yjPower(test$nuvirdi, lambda.all)
 lm.allYTransformed <- lm(nuvirdi ~ kdagur + teg_eign + byggar + haednr + lyfta + ibm2 + fjhaed + fjbilast + fjbkar + fjsturt + fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar, data = trainTransf)
 
 Radj.allYTransformed <- CalculateRadjusted(lm.allYTransformed, testTransf) # 0.7890585
+
+lm.stepYtransformed <- step(lm.allYTransformed)
+
+# Nota step á modelið þar sem búið var að transform-a nuvirdi
+Radj.stepYtransformed <- CalculateRadjusted(lm.stepYtransformed, testTransf) # 0.7913491
 ```
 
 
@@ -116,6 +121,7 @@ indexPlotLeverage(lm.all)
 indexPlotStResiduals(lm.all)
 # blue dots have high residuals and green have high leverage
 indexPlotCookdistance(lm.all)
+
 
 ```
 
