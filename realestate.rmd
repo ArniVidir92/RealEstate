@@ -39,6 +39,7 @@ rows<-sample(1:n,n/3)
 train <- data.table(dt.RE_data[-rows,])
 test <- data.table(dt.RE_data[rows,])
 
+# Brooks was here, and Red to
 kdagur <- train$kdagur         
 nuvirdi <- train$nuvirdi        
 teg_eign <- as.factor(train$teg_eign)      
