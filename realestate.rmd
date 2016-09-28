@@ -175,3 +175,12 @@ summary(lm.prufa)
 diag.prufa <- fortify(lm.prufa)
 ```
 
+```{r}
+################################################# PLOTS
+indexPlotResiduals(lm.all)
+QQplotResiduals(lm.all)
+QQplotResiduals(lm.allYTransformed)
+QQplotResiduals(lm.stepYtransformed)
+```
+
+

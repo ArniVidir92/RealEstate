@@ -126,3 +126,14 @@ removeInfluential <- function(model, maxCookDistance){
          fjklos + fjeld + fjherb + fjstof + fjgeym + stig10 + ibteg + k.ar, data=rowsWithNoInfluentials)
   )
 }
+
+
+QQplotResiduals <- function(model){
+  diag <- data.table(fortify(model))
+  res_sd <- sd(diag$.resid)
+  QQResP<-ggplot(diag, aes(sample = .resid)) + stat_qq()
+  QQResP <- QQResP + geom_abline(slope=res_sd)
+  QQResP <- QQResP + ylab("Residuals")
+  QQResP
+}
+
