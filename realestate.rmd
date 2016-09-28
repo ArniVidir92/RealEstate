@@ -66,12 +66,31 @@ testTransf$nuvirdi <- yjPower(test$nuvirdi, lambda.all)
 
 lm.allYTransformed <- lm(nuvirdi ~ ., data = trainTransf)
 
-Radj.allYTransformed <- CalculateRadjusted(lm.allYTransformed, testTransf) # 0.7890585
+Radj.allYTransformed <- CalculateRadjusted(lm.allYTransformed, testTransf) # 0.8488961
 
 lm.stepYtransformed <- step(lm.allYTransformed)
 
 # Nota step á modelið þar sem búið var að transform-a nuvirdi
 Radj.stepYtransformed <- CalculateRadjusted(lm.stepYtransformed, testTransf) # 0.7913491
+
+# Transform nuvirdi og ibm2
+
+trainTransf$ibm2 <- log(train$ibm2)
+testTransf$ibm2 <- log(test$ibm2)
+lm.allYTransformedAndIBM2 <- lm(nuvirdi ~ ., data = trainTransf)
+Radj.allYTransformedAndIBM2 <- CalculateRadjusted(lm.allYTransformedAndIBM2, testTransf) # 0.8880478
+
+# use step function going backwards
+slm.stepBackYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2)
+Radj.stepBackYTransformedAndIBM2 <- CalculateRadjusted(slm.stepBackYTransformedAndIBM2, testTransf) # 0.889269
+
+# use step function going forward
+slm.stepForwYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2, direction = 'forward')
+Radj.stepForwYTransformedAndIBM2 <- CalculateRadjusted(slm.stepForwYTransformedAndIBM2, testTransf) # 0.8880478
+
+# Ath. virkar ekki. langaði að fjarlægja stærstu outliers og sjá hvort við fáum betra Radj.
+#ind <- RemoveNOutliers(train,4)
+
 ```
 
 
@@ -181,6 +200,7 @@ indexPlotResiduals(lm.all)
 QQplotResiduals(lm.all)
 QQplotResiduals(lm.allYTransformed)
 QQplotResiduals(lm.stepYtransformed)
+QQplotResiduals(slm.stepBackYTransformedAndIBM2)
 ```
 
 

@@ -71,6 +71,7 @@ removeOutliersAndReturnNewModel <- function(model,alpha){
   
 }
 
+# Þurfum líklega að laga þetta fall
 removeOutliersWStdResMoreThanThree <- function(model){
   diag <- data.table(fortify(model))
   rowsWithNoOutliers <- diag[abs(diag$.stdresid) < 3,]
@@ -99,6 +100,7 @@ removeOutliersWStdResMoreThanThree <- function(model){
     )
 }
 
+# Þurfum líklega að laga þetta fall
 removeInfluential <- function(model, maxCookDistance){
   diag <- data.table(fortify(model))
   rowsWithNoInfluentials <- diag[diag$.cooksd < maxCookDistance,]
@@ -137,3 +139,17 @@ QQplotResiduals <- function(model){
   QQResP
 }
 
+# Þetta fall virkar ekki
+RemoveNOutliers <- function(dt, n){
+  lm.temp <- lm(nuvirdi ~ ., data=dt)
+  diag <- fortify(lm.temp)
+  n <- length(diag$.hat)
+  diag$.index <- c(1:n)
+  temp <- data.table(diag)
+  index <- numeric()
+  for (i in c(1:n)) {
+    append(index, temp$.index[temp$.resid == max(temp$.resid)])
+    temp <- temp[temp$.resid != max(temp$.resid), ]
+  }
+  return(index)
+}
