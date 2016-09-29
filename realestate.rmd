@@ -84,6 +84,8 @@ Radj.allYTransformedAndIBM2 <- CalculateRadjusted(lm.allYTransformedAndIBM2, tes
 slm.stepBackYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2)
 Radj.stepBackYTransformedAndIBM2 <- CalculateRadjusted(slm.stepBackYTransformedAndIBM2, testTransf) # 0.889269
 
+
+
 # use step function going forward
 slm.stepForwYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2, direction = 'forward')
 Radj.stepForwYTransformedAndIBM2 <- CalculateRadjusted(slm.stepForwYTransformedAndIBM2, testTransf) # 0.8880478
