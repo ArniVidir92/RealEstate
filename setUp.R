@@ -57,4 +57,3 @@ rows<-sample(1:n,n/3)
 train <- data.table(dt.RE_data[-rows,])
 test <- data.table(dt.RE_data[rows,])
 
-lm.all1 <- lm(nuvirdi ~ ., data=train)
