@@ -31,7 +31,7 @@ source("testArni.R")
 
 lm.all <- lm(nuvirdi ~ .,data=train)
 #ggpairs(dt.RE_data)
-
+train
 
 ```
 
@@ -66,51 +66,40 @@ testTransf$nuvirdi <- yjPower(test$nuvirdi, lambda.all)
 
 lm.allYTransformed <- lm(nuvirdi ~ ., data = trainTransf)
 
-Radj.allYTransformed <- CalculateRadjusted(lm.allYTransformed, testTransf) # 0.8488961
-
-lm.stepYtransformed <- step(lm.allYTransformed)
-
-# Nota step á modelið þar sem búið var að transform-a nuvirdi
-Radj.stepYtransformed <- CalculateRadjusted(lm.stepYtransformed, testTransf) # 0.7913491
+Radj.allYTransformed <- CalculateRadjLambda(lm.allYTransformed, testTransf, lambda.all) # 0.8488961 rétt: 0.7643883
 
 # Transform nuvirdi og ibm2
 
 trainTransf$ibm2 <- log(train$ibm2)
 testTransf$ibm2 <- log(test$ibm2)
 lm.allYTransformedAndIBM2 <- lm(nuvirdi ~ ., data = trainTransf)
-Radj.allYTransformedAndIBM2 <- CalculateRadjusted(lm.allYTransformedAndIBM2, testTransf) # 0.8880478
+Radj.allYTransformedAndIBM2 <- CalculateRadjLambda(lm.allYTransformedAndIBM2, testTransf, lambda.all) # 0.8880478 rétt: 0.8342736
 
 # use step function going backwards
 slm.stepBackYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2)
-Radj.stepBackYTransformedAndIBM2 <- CalculateRadjusted(slm.stepBackYTransformedAndIBM2, testTransf) # 0.889269
+Radj.stepBackYTransformedAndIBM2 <- CalculateRadjLambda(slm.stepBackYTransformedAndIBM2, testTransf, lambda.all) # 0.889269 rétt: 0.8360234
 
 
 # use step function going forward
 slm.stepForwYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2, direction = 'forward')
-Radj.stepForwYTransformedAndIBM2 <- CalculateRadjusted(slm.stepForwYTransformedAndIBM2, testTransf) # 0.8880478
+Radj.stepForwYTransformedAndIBM2 <- CalculateRadjLambda(slm.stepForwYTransformedAndIBM2, testTransf, lambda.all) # 0.8880478 rétt: 0.8342736
 
 summary(lm.all)
 # testing
 slm.stepTest <- step(lm(nuvirdi ~ 1, data=trainTransf),nuvirdi ~ kdagur+teg_eign+byggar+haednr+lyfta+ibm2+fjhaed+fjbilast+fjbkar+fjsturt+fjklos+fjeld+fjherb+fjherb+fjstof+fjgeym+stig10+matssvaedi+undirmatssvaedi+ibteg+k.ar, direction = 'forward')
-Radj.stepTest <- CalculateRadjusted(slm.stepTest, testTransf) # 0.889269
-
-null <- lm(nuvirdi~1, data = trainTransf)
-full <- lm.allYTransformedAndIBM2
+Radj.stepTest <- CalculateRadjLambda(slm.stepTest, testTransf, lambda.all) # 0.889269 rétt: 0.8360234
 
 # BIC test
+null <- lm(nuvirdi~1, data = trainTransf)
+full <- lm.allYTransformedAndIBM2
 lm.BIC <- step(null, scope = list(lower=null,upper=full),
      direction="both", k=log(dim(trainTransf)[1]))
-Radj.BICStep <- CalculateRadjusted(lm.BIC, testTransf) # 0.8889675
+Radj.BICStep <- CalculateRadjLambda(lm.BIC, testTransf, lambda.all) # 0.8889675 rétt: 0.8352896
 
 # AIC test
 lm.AIC <- step(null, scope = list(lower=null,upper=full),
      direction="both", k=2)
-Radj.AICStep <- CalculateRadjusted(lm.AIC, testTransf) # 0.889269
-
-# Ath. virkar ekki. langaði að fjarlægja stærstu outliers og sjá hvort við fáum betra Radj.
-#ind <- RemoveNOutliers(train,4)
-
-# Test poly
+Radj.AICStep <- CalculateRadjLambda(lm.AIC, testTransf, lambda.all) # 0.889269 # rétt: 0.8360234
 
 ```
 

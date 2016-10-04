@@ -43,8 +43,8 @@ for(i in 1:nrow(dt.RE_data)){
 }
 
 for(i in 1:nrow(dt.RE_data)){
-  if(dt.RE_data$ibteg[i]==11){dt.RE_data$ibteg="Sérbýli"}
-  else{dt.RE_data$ibteg[i]="Fjölbýli"}
+  if(dt.RE_data$ibteg[i]==11){dt.RE_data$ibteg="Serbyli"}
+  else{dt.RE_data$ibteg[i]="Fjolbyli"}
 }
 
 dt.RE_data <- dt.RE_data[,ibteg:=as.factor(ibteg)]
