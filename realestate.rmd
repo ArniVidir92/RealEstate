@@ -89,8 +89,28 @@ Radj.stepBackYTransformedAndIBM2 <- CalculateRadjusted(slm.stepBackYTransformedA
 slm.stepForwYTransformedAndIBM2 <- step(lm.allYTransformedAndIBM2, direction = 'forward')
 Radj.stepForwYTransformedAndIBM2 <- CalculateRadjusted(slm.stepForwYTransformedAndIBM2, testTransf) # 0.8880478
 
+summary(lm.all)
+# testing
+slm.stepTest <- step(lm(nuvirdi ~ 1, data=trainTransf),nuvirdi ~ kdagur+teg_eign+byggar+haednr+lyfta+ibm2+fjhaed+fjbilast+fjbkar+fjsturt+fjklos+fjeld+fjherb+fjherb+fjstof+fjgeym+stig10+matssvaedi+undirmatssvaedi+ibteg+k.ar, direction = 'forward')
+Radj.stepTest <- CalculateRadjusted(slm.stepTest, testTransf) # 0.889269
+
+null <- lm(nuvirdi~1, data = trainTransf)
+full <- lm.allYTransformedAndIBM2
+
+# BIC test
+lm.BIC <- step(null, scope = list(lower=null,upper=full),
+     direction="both", k=log(dim(trainTransf)[1]))
+Radj.BICStep <- CalculateRadjusted(lm.BIC, testTransf) # 0.8889675
+
+# AIC test
+lm.AIC <- step(null, scope = list(lower=null,upper=full),
+     direction="both", k=2)
+Radj.AICStep <- CalculateRadjusted(lm.AIC, testTransf) # 0.889269
+
 # Ath. virkar ekki. langaði að fjarlægja stærstu outliers og sjá hvort við fáum betra Radj.
 #ind <- RemoveNOutliers(train,4)
+
+# Test poly
 
 ```
 
