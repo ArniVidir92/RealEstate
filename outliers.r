@@ -11,6 +11,16 @@ indexPlotLeverage <- function(model){
   lev_index<-lev_index+geom_text(aes(label=ifelse(.hat>2*p/n,.index,"")),hjust=0, vjust=0)
   lev_index
 }
+#model<-lm.all
+fittedVsresiduals <- function(model){
+  diag <- data.table(fortify(model))
+  diag$.index = c(1:length(diag$.resid))
+  p<-length(coef(model))
+  n<-length(fitted(model))
+  fitVsres <-ggplot(diag, aes(x=.fitted,y=.resid))+geom_point()+ylim(1.5*max(diag$.resid),1.5*max(diag$.resid))
+  fitVsres          
+}
+
 
 # blue dots have high residuals and green have high leverage
 indexPlotCookdistance <- function(model){

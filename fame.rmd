@@ -22,7 +22,7 @@ output:
     toc_depth: '2' 
 ---
 
-```{r echo=FALSE}
+```{r echo=FALSE, message=FALSE, error=FALSE}
 # Bara að gera setup ef það þarf
 if(!exists("dt.RE_data")){ source("setUp.R")}
 source("utilz.R")
