@@ -1,0 +1,39 @@
+--- 
+title: "Frame5"
+author: Ottó Hólm Reynisson
+date: 15.september 2016
+subject: null
+header-includes: 
+   - \usepackage{longtable} 
+   - \usepackage{graphics} 
+   - \usepackage[icelandic]{babel} 
+   - \usepackage{tabularx} 
+   - \usepackage{booktabs,colortbl,xcolor} 
+output: 
+  pdf_document: 
+    number_sections: no 
+    toc: no 
+    toc_depth: 2 
+    fig_caption: yes 
+  html_document: 
+    self_contained: yes 
+  word_document: 
+    toc: yes 
+    toc_depth: '2' 
+---
+
+
+```{r child='diagnostics.rmd'}
+
+```
+
+
+```{r child='transformation.rmd'}
+
+```
+
+
+```{r child='variableSelection.rmd'}
+
+```
+
