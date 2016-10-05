@@ -35,6 +35,7 @@ train
 
 ```
 
+# 1. Diagnostics
 
 ```{r}
 ###################################### R squared adjusted fyrir lm.all
