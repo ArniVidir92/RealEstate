@@ -47,26 +47,7 @@ testBCNOIBM2$ibm2 <- log(testBCNO$ibm2)
 lm.allBcIBM2 <- lm(nuvirdi ~ ., data = trainBCAllIBM2)
 lm.allNOBcIBM2 <- lm(nuvirdi ~ ibm2*matssvaedi+undirmatssvaedi+ibteg+teg_eign+fjeld+k.ar, data = trainBCNOIBM2)
 Radj.allBcIBM2 <- CalculateRadjLambda(lm.allBcIBM2, testBCAllIBM2, lambdaAll) # 0.8880478 rétt: 0.8342736
-Radj.allNOBcIBM2 <- CalculateRadjLambda(lm.allNOBcIBM2, testBCNOIBM2, lambdaNO) # 0.8880478 rétt: 0.8342736
-Radj.allNOBcIBM2
+Radj.allNOBcIBM2 <- CalculateRadjLambda(lm.allNOBcIBM2, testBCNOIBM2, lambdaNO) 
 
-
-lm.allNOBcIBM2 <- lm(nuvirdi ~ ibm2*matssvaedi+undirmatssvaedi+ibteg+teg_eign+fjeld+as.factor(k.ar), data = trainBCNOIBM2)
-
-lm.allNOBcIBM2 <- lm(nuvirdi ~ ibm2*matssvaedi+undirmatssvaedi+ibteg+teg_eign+fjeld+k.ar, data = trainBCNOIBM2)
-
-# BIC test
-null <- lm(nuvirdi~1, data = trainBCAllIBM2)
-full <- lm.allBcIBM2
-lm.BIC <- step(null, scope = list(lower=null,upper=full),
-     direction="both", k=log(dim(trainBCAllIBM2)[1]))
-Radj.BICStep <- CalculateRadjLambda(lm.BIC, testBCAllIBM2, lambdaAll) # 0.8889675 rétt: 0.8352896
-
-# AIC test
-lm.AIC <- step(null, scope = list(lower=null,upper=full),
-     direction="both", k=2)
-Radj.AICStep <- CalculateRadjLambda(lm.AIC, testTransf, lambda.all) # 0.889269 # rétt: 0.8360234
-
-plot()
 ```
 
