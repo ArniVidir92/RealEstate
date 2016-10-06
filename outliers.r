@@ -73,7 +73,7 @@ indexPlotJackResiduals <- function(model){
   Jack_index<-Jack_index+geom_hline(yintercept=0, col="red", linetype="dashed")
   Jack_index<-Jack_index+xlab("Index")+ylab("Jackknife residuals")
   Jack_index<-Jack_index+geom_text(aes(label=ifelse(abs(.jack)>2.4,.index,"")),hjust=0, vjust=0)
-  Jack_index
+  Jack_index <- Jack_index + labs(title="Index plot of Jackknife residuals") 
 }
 
 removeOutliersAndReturnNewModel <- function(model,alpha){

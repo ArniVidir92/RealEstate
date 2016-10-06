@@ -5,7 +5,7 @@ Begin by looking at the residuals from this model
 indexPlotJackResiduals(lm.all)
 ```
 
-Here the blue line represent 2 standard deviation from 0 and green line 3 standard deviation away from 0. To help us identify the possible outliers we mark points 2 sd from 0 with their index.  
+Here the blue line represent 2 standard deviation from 0 and green line 3 standard deviation away from 0. To help us identify the possible outliers we mark points 2 sd from 0 with their index.  We clearly see that there are some possible outliers that need further diagnostics.
 
 ## Leverages
 
@@ -21,14 +21,19 @@ indexPlotLeverage(lm.all)
 Studentized residuals are sometimes preferred in residual plots as they have been standardized to have equal variance. They are also a big part in the Jackkiife residulas that follows
 
 ```{r}
-indexPlotStResiduals(lm.all)
+stres <- indexPlotStResiduals(lm.all)+ylim(-5,20)
 ```
 
 Blue and green line represent as before 2 and 3 sd from zero. 
 
 ```{r}
-indexPlotJackResiduals(lm.all)
+jackres <- indexPlotJackResiduals(lm.all)+ylim(-5,20)
 ```
+
+```{r}
+multiplot(stres,jackres,cols = 2)
+```
+
 
 
 ```{r}
