@@ -34,32 +34,33 @@ jackres <- indexPlotJackResiduals(lm.all)+ylim(-5,20)
 multiplot(stres,jackres,cols = 2)
 ```
 
-
+Cook's distance (calculated w.r.t Jackknife and Std.Residuals) is a good way to diagnose influential points in the model. Points with high Cooks distance are affecting the model more than the others. The green points have high Cooks distance, but the blue points have high Cooks distance but also high leverage.
 
 ```{r}
-######################  Föll fyrir residuals og annað er í outliers.R skránni  ######
-
-# funcions to plot residuals and leverage
-indexPlotResiduals(lm.all)
-indexPlotJackResiduals(lm.all)
-indexPlotLeverage(lm.all)
-indexPlotStResiduals(lm.all)
-# blue dots have high residuals and green have high leverage
 indexPlotCookdistance(lm.all)
-
-
 ```
+
+To see how well the model fits the data, we plot the fitted value against residuals. This should be scatterplot with no specified form.
+
+```{r}
+fittedVsresiduals(lm.all)
+```
+
+We clearly see this is not what we expected to see. This means we have to do some transformation and remove the biggest outliers.
+
 
 ```{r}
 ###################################### R squared adjusted fyrir lm.all
 Radj.all <- CalculateRadjusted(lm.all, test) # 0.7990392
 ```
 
+
 ```{r}
 #################################### lm.allNoOutliers Here I take out all outliers and get a new model #################
 lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
 Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) # 0.7328961
 ```
+
 
 ```{r}
 #################################### lm.allNoInfluential Here I take out all influential points and get a new model ####
