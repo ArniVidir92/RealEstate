@@ -1,8 +1,8 @@
 ## Residuals
 Begin by looking at the residuals from this model
 
-```{r}
-indexPlotJackResiduals(lm.all)
+```{r echo=FALSE, message=FALSE, error=FALSE}
+indexPlotResiduals(lm.all)
 ```
 
 Here the blue line represent 2 standard deviation from 0 and green line 3 standard deviation away from 0. To help us identify the possible outliers we mark points 2 sd from 0 with their index.  We clearly see that there are some possible outliers that need further diagnostics.
@@ -11,7 +11,7 @@ Here the blue line represent 2 standard deviation from 0 and green line 3 standa
 
 The next thing to do is looking at the leverages, that is the measure of how far independent variable values of an observation are from those of the other observation.
 
-```{r}
+```{r echo=FALSE, message=FALSE, error=FALSE}
 indexPlotLeverage(lm.all)
 ```
 
@@ -20,52 +20,104 @@ indexPlotLeverage(lm.all)
 
 Studentized residuals are sometimes preferred in residual plots as they have been standardized to have equal variance. They are also a big part in the Jackkiife residulas that follows
 
-```{r}
+```{r echo=FALSE, message=FALSE, error=FALSE}
 stres <- indexPlotStResiduals(lm.all)+ylim(-5,20)
 ```
 
 Blue and green line represent as before 2 and 3 sd from zero. 
 
-```{r}
+```{r echo=FALSE, message=FALSE, error=FALSE}
 jackres <- indexPlotJackResiduals(lm.all)+ylim(-5,20)
 ```
-
-```{r}
+ 
+```{r echo=FALSE, message=FALSE, error=FALSE}
 multiplot(stres,jackres,cols = 2)
 ```
 
 Cook's distance (calculated w.r.t Jackknife and Std.Residuals) is a good way to diagnose influential points in the model. Points with high Cooks distance are affecting the model more than the others. The green points have high Cooks distance, but the blue points have high Cooks distance but also high leverage.
 
-```{r}
+```{r echo=FALSE, message=FALSE, error=FALSE}
 indexPlotCookdistance(lm.all)
 ```
 
 To see how well the model fits the data, we plot the fitted value against residuals. This should be scatterplot with no specified form.
 
-```{r}
-fittedVsresiduals(lm.all)
+```{r echo=FALSE, message=FALSE, error=FALSE}
+fitVsres <- fittedVsresiduals(lm.all)
 ```
 
-We clearly see this is not what we expected to see. This means we have to do some transformation and remove the biggest outliers.
+We clearly see this is not what we expected to see. Also the QQ plot This means we have to do some transformation and remove the biggest outliers.  
+
+  
+```{r echo=FALSE, message=FALSE, error=FALSE}
+QQ <- QQplotResiduals(lm.all) + labs(title="QQ plot of train data")
+```
+
+```{r echo=FALSE, message=FALSE, error=FALSE}
+multiplot(fitVsres,QQ,cols = 2)
+```
 
 
-```{r}
+```{r echo=FALSE, message=FALSE, error=FALSE}
 ###################################### R squared adjusted fyrir lm.all
 Radj.all <- CalculateRadjusted(lm.all, test) # 0.7990392
 ```
 
+First we calculate the R-adjusted for the first model and get $R-adjusted$= `r Radj.all`
+Now by removing the residuals that have std. residuals $>$ 3 we have new model.
 
-```{r}
-#################################### lm.allNoOutliers Here I take out all outliers and get a new model #################
+```{r echo=FALSE, message=FALSE, error=FALSE}
+## Tek út punkta með Std. Res > 3
 lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
-Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) # 0.7328961
+Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) # 0.7328961 # Ottó: 0.7905836
 ```
 
 
-```{r}
-#################################### lm.allNoInfluential Here I take out all influential points and get a new model ####
+
+The plots below show that the model in instatnly better, just by removing some outliers.
+
+```{r echo=FALSE, message=FALSE, error=FALSE}
+##QQ plot af nýju modeli án Std. Resiudals
+
+fittedNo <- fittedVsresiduals(lm.allNoOutlier)
+QQno <- QQplotResiduals(lm.allNoOutlier) + labs(title="QQ plot no Std res > 3")
+multiplot(fittedNo,QQno,cols = 2)
+Radj.allNoOutliers
+```
+
+We want
+
+```{r echo=FALSE, message=FALSE, error=FALSE}
+
+## Tek út Influential punkta með Cooks Distnace =4/n
+
 lm.allNoInfluential <- removeInfluential(lm.all,maxCookDistance = 4/n)
-Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test) # 0.7327364
+Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test)# 0.7327364 # 0.7888572
+Radj.allNoInfluential
 ```
 
+
+```{r echo=FALSE, message=FALSE, error=FALSE}
+## QQ plot and Fitted of No Influential
+
+fittedNoInf <- fittedVsresiduals(lm.allNoInfluential)
+QQnoInf <- QQplotResiduals(lm.allNoInfluential) + labs(title="QQ plot no influential")
+multiplot(fittedNoInf,QQnoInf,cols = 2)
+```
+
+
+```{r echo=FALSE, message=FALSE, error=FALSE}
+#No influential and no residuals
+lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
+lm.allNoInfluentialNoOutlier <- removeInfluential(lm.allNoOutlier,maxCookDistance = 4/n)
+
+##QQ plot of no influentiial points and 
+
+fittedNoInfNoOut <- fittedVsresiduals(lm.allNoInfluential)
+QQNoInfNoOut <- QQplotResiduals(lm.allNoInfluentialNoOutlier) + labs(title="QQ plot no inf no std res > 3")
+multiplot(fittedNoInfNoOut,QQNoInfNoOut,cols = 2)
+
+Radj.allNoInfluentialNoOutlier <- CalculateRadjusted(lm.allNoInfluentialNoOutlier, test)
+Radj.allNoInfluentialNoOutlier
+```
 
