@@ -17,7 +17,7 @@ fittedVsresiduals <- function(model){
   diag$.index = c(1:length(diag$.resid))
   p<-length(coef(model))
   n<-length(fitted(model))
-  fitVsres <-ggplot(diag, aes(x=.fitted,y=.resid))+geom_point()+ylim(1.5*max(diag$.resid),1.5*max(diag$.resid))
+  fitVsres <-ggplot(diag, aes(x=.fitted,y=.resid))+geom_point()+ylim(-1.5*max(diag$.resid),1.5*max(diag$.resid))
   fitVsres          
 }
 
