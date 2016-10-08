@@ -40,12 +40,12 @@ lm.all <- lm(nuvirdi ~ .,data=train)
 ```
 
 
-#```{r child='transformation.rmd'}
-#
-#```
+```{r child='transformation.rmd'}
+
+```
 
 
-#```{r child='variableSelection.rmd'}
-#
-#```
+```{r child='variableSelection.rmd'}
+
+```
 

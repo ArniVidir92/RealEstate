@@ -1,2 +1,35 @@
 
+# Variable selection
+
+We are now only working with the transformed data from the transformation chapter.
+
+```{r}
+trainTransf <- trainBCAllIBM2
+testTransf <- testBCAllIBM2
+trainTransfNO <-trainBCNOIBM2
+testTransfNO <- testBCNOIBM2
+```
+
+Lets try to use BIC and AIC criteria to select our variables.
+
+```{r}
+# BIC test
+null <- lm(nuvirdi~1, data = trainTransf)
+full <- lm(nuvirdi~ ., data = trainTransf)
+lm.BIC <- step(null, scope = list(lower=null,upper=full),
+     direction="both", k=log(dim(trainTransf)[1]))
+Radj.BICStep <- CalculateRadjLambda(lm.BIC, testTransf, lambdaAll) # 0.8889675 rétt: 0.8352896
+
+# AIC test
+lm.AIC <- step(null, scope = list(lower=null,upper=full),
+     direction="both", k=2)
+Radj.AICStep <- CalculateRadjLambda(lm.AIC, testTransf, lambdaAll) # 0.889269 # rétt: 0.8360234
+```
+
+```{r}
+RadjVector <- data.table()
+
+RadjVector <- c(c("","","","","",""),c(Radj.allBc,Radj.allNOBc,Radj.allBcIBM2,Radj.allNOBcIBM2,Radj.BICStep, Radj.AICStep))
+```
+
 

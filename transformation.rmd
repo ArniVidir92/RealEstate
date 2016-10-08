@@ -4,19 +4,19 @@ We know that nuvirdi has an unusually heavy tale so we'll start by transforming 
 
 ```{r, fig.cap="Boxcox plot for the model and the model without outliers. No outlier plot is on the right", warning=FALSE}
 par(mfrow=c(1,2))
-lm.allNoOutlier
 boxcox(lm.all)
 boxcox(lm.allNoOutlier)
 par(mfrow=c(1,1))
 ```
 
 ```{r}
-trainNO <- train
 bcAll <- boxcox(lm.all, plotit = FALSE)
-bcNO <- boxcox(lm.noOutlier, plotit = FALSE)
+bcNO <- boxcox(lm.allNoOutlier, plotit = FALSE)
+
 # Get the highest value from the boxcox plots
 lambdaAll <- with(bcAll, x[which.max(y)])
 lambdaNO <- with(bcNO, x[which.max(y)])
+
 # Transform the train and test datasets
 trainBCAll <- bcTransF(train, lambdaAll)
 testBCAll <- bcTransF(test, lambdaAll)
@@ -26,7 +26,7 @@ testBCNO <- bcTransF(test, lambdaNO)
 lm.allBc <- lm(nuvirdi ~ ., data = trainBCAll)
 lm.allNoOutlierBc <- lm(nuvirdi ~ ., data = trainBCNO)
 Radj.allBc <- CalculateRadjLambda(lm.allBc, testBCAll, lambdaAll) # 0.8488961 rétt: 0.7643883
-Radj.allNOBc <- CalculateRadjLambda(lm.noOutlierBc, testBCNO, lambdaNO)
+Radj.allNOBc <- CalculateRadjLambda(lm.allNoOutlierBc, testBCNO, lambdaNO)
 
 ```
 
@@ -45,9 +45,24 @@ testBCNOIBM2 <- testBCNO
 testBCNOIBM2$ibm2 <- log(testBCNO$ibm2)
 
 lm.allBcIBM2 <- lm(nuvirdi ~ ., data = trainBCAllIBM2)
-lm.allNOBcIBM2 <- lm(nuvirdi ~ ibm2*matssvaedi+undirmatssvaedi+ibteg+teg_eign+fjeld+k.ar, data = trainBCNOIBM2)
+lm.allNOBcIBM2 <- lm(nuvirdi ~ ., data = trainBCNOIBM2)
 Radj.allBcIBM2 <- CalculateRadjLambda(lm.allBcIBM2, testBCAllIBM2, lambdaAll) # 0.8880478 rétt: 0.8342736
 Radj.allNOBcIBM2 <- CalculateRadjLambda(lm.allNOBcIBM2, testBCNOIBM2, lambdaNO) 
 
+
+# Geymi hér. Þetta er besta módelið hingað til
+bcBest <- boxcox(lm.best)
+lambdaBest <- with(bcBest, x[which.max(y)])
+trainBCBest <- bcTransF(train, lambdaBest)
+testBCBest <- bcTransF(test, lambdaBest)
+trainBCBestIBM2 <- trainBCBest
+trainBCBestIBM2$ibm2 <- log(trainBCBest$ibm2)
+testBCBestIBM2 <- testBCBest
+testBCBestIBM2$ibm2 <- log(testBCBest$ibm2)
+
+lm.best <- lm(nuvirdi ~ ibm2*matssvaedi+undirmatssvaedi+ibteg+teg_eign+fjeld+k.ar, data = trainBCBestIBM2)
+Radj.best <- CalculateRadjLambda(lm.best, testBCBestIBM2, lambdaBest)
 ```
+
+Here we get a better value for R adjusted. We get $R_{adj. full model}=`r Radj.allBcIBM2`$ for the full model and $R_{adj. NoOutliers}=`r Radj.allNOBcIBM2`$ for the model without outliers.
 
