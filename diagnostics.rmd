@@ -68,7 +68,8 @@ Now by removing the residuals that have std. residuals $>$ 3 we have new model.
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 ## Tek út punkta með Std. Res > 3
-lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
+trainNO <- removeOutliersWStdResMoreThanThree(train)
+lm.allNoOutlier <- lm(nuvirdi ~ . ,data = trainNO)
 Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) # 0.7328961 # Ottó: 0.7905836
 ```
 
@@ -108,8 +109,9 @@ multiplot(fittedNoInf,QQnoInf,cols = 2)
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 #No influential and no residuals
-lm.allNoOutlier <- removeOutliersWStdResMoreThanThree(lm.all)
-lm.allNoInfluentialNoOutlier <- removeInfluential(lm.allNoOutlier,maxCookDistance = 4/n)
+trainNO <- removeOutliersWStdResMoreThanThree(train)
+lm.allNoOutlier <- lm(nuvirdi ~ . ,data = trainNO)
+trainNoInfl <- removeInfluential(train,maxCookDistance = 4/n)
 
 ##QQ plot of no influentiial points and 
 
