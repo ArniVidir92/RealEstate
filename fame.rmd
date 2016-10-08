@@ -27,7 +27,7 @@ output:
 if(!exists("dt.RE_data")){ source("setUp.R")}
 source("utilz.R")
 source("outliers.R")
-source("transformation.R")
+#source("transformation.R")
 source("testArni.R")
 
 lm.all <- lm(nuvirdi ~ .,data=train)
@@ -40,12 +40,12 @@ lm.all <- lm(nuvirdi ~ .,data=train)
 ```
 
 
-```{r child='transformation.rmd'}
+#```{r child='transformation.rmd'}
+#
+#```
 
-```
 
-
-```{r child='variableSelection.rmd'}
-
-```
+#```{r child='variableSelection.rmd'}
+#
+#```
 

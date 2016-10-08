@@ -4,9 +4,9 @@ We know that nuvirdi has an unusually heavy tale so we'll start by transforming 
 
 ```{r, fig.cap="Boxcox plot for the model and the model without outliers. No outlier plot is on the right", warning=FALSE}
 par(mfrow=c(1,2))
-lm.noOutlier <- lm(nuvirdi ~ ibm2, data=train)
+lm.allNoOutlier
 boxcox(lm.all)
-boxcox(lm.noOutlier)
+boxcox(lm.allNoOutlier)
 par(mfrow=c(1,1))
 ```
 
@@ -24,7 +24,7 @@ trainBCNO <- bcTransF(trainNO, lambdaNO)
 testBCNO <- bcTransF(test, lambdaNO)
 
 lm.allBc <- lm(nuvirdi ~ ., data = trainBCAll)
-lm.noOutlierBc <- lm(nuvirdi ~ ibm2, data = trainBCNO)
+lm.allNoOutlierBc <- lm(nuvirdi ~ ., data = trainBCNO)
 Radj.allBc <- CalculateRadjLambda(lm.allBc, testBCAll, lambdaAll) # 0.8488961 rétt: 0.7643883
 Radj.allNOBc <- CalculateRadjLambda(lm.noOutlierBc, testBCNO, lambdaNO)
 
