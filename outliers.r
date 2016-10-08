@@ -18,7 +18,7 @@ fittedVsresiduals <- function(model){
   p<-length(coef(model))
   n<-length(fitted(model))
   fitVsres <-ggplot(diag, aes(x=.fitted,y=.resid))+geom_point()+ylim(-1.5*max(diag$.resid),1.5*max(diag$.resid))
-  fitVsres <- fitVsres + labs(title="Fitted value against residuals", ylab="Fitted value",xlab="Residuals")          
+  fitVsres <- fitVsres+labs(title="Fitted value against residuals")+ylab("Residuals")+xlab("Fitted value")          
 }
 
 
@@ -114,7 +114,39 @@ removeOutliersAndReturnNewModel <- function(model,alpha){
 
 #.hat,.sigma,.cooksd,.fitted.resid,.stdresid
 
-removeOutliersWStdResMoreThanThree <- function(model){
+#removeOutliersWStdResMoreThanThree <- function(model){
+#  diag <- data.table(fortify(model))
+#  rowsWithNoOutliers <- diag[abs(diag$.stdresid) < 3,]
+#  rowsWithNoOutliers <- rowsWithNoOutliers[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
+  #kdagur <- rowsWithNoOutliers$kdagur         
+  #nuvirdi <- rowsWithNoOutliers$nuvirdi        
+  #teg_eign <- as.factor(rowsWithNoOutliers$teg_eign)      
+  #byggar <- rowsWithNoOutliers$byggar         
+  #haednr <- rowsWithNoOutliers$haednr        
+  #lyfta <- rowsWithNoOutliers$lyfta       
+  #ibm2  <- rowsWithNoOutliers$ibm2         
+  #fjhaed <- rowsWithNoOutliers$fjhaed    
+  #fjbilast  <- rowsWithNoOutliers$fjbilast    
+  #fjbkar  <- rowsWithNoOutliers$fjbkar
+  #fjsturt <- rowsWithNoOutliers$fjsturt
+  #fjklos  <- rowsWithNoOutliers$fjklos 
+  #fjeld  <- rowsWithNoOutliers$fjeld    
+  #fjherb  <- rowsWithNoOutliers$fjherb
+  #fjstof  <- rowsWithNoOutliers$fjstof    
+  #fjgeym  <- rowsWithNoOutliers$fjgeym     
+  #stig10  <- rowsWithNoOutliers$stig10   
+  #ibteg <- as.factor(rowsWithNoOutliers$ibteg) 
+  #k.ar <- rowsWithNoOutliers$k.ar
+#  return(
+#    lm(nuvirdi ~ ., data=rowsWithNoOutliers)
+#  )
+#}
+
+
+
+
+removeOutliersWStdResMoreThanThree <- function(dt){
+  model <- lm(nuvirdi ~ .,data=dt)
   diag <- data.table(fortify(model))
   rowsWithNoOutliers <- diag[abs(diag$.stdresid) < 3,]
   rowsWithNoOutliers <- rowsWithNoOutliers[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
@@ -138,18 +170,14 @@ removeOutliersWStdResMoreThanThree <- function(model){
   #ibteg <- as.factor(rowsWithNoOutliers$ibteg) 
   #k.ar <- rowsWithNoOutliers$k.ar
   return(
-    lm(nuvirdi ~ ., data=rowsWithNoOutliers)
+    rowsWithNoOutliers
   )
 }
 
 
-
-
-
-
-
 # Þurfum líklega að laga þetta fall
-removeInfluential <- function(model, maxCookDistance){
+removeInfluential <- function(dt, maxCookDistance){
+  model <- lm(nuvirdi ~ .,data=dt)
   diag <- data.table(fortify(model))
   rowsWithNoInfluentials <- diag[diag$.cooksd < maxCookDistance,]
   rowsWithNoInfluentials <- rowsWithNoInfluentials[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
@@ -173,9 +201,39 @@ removeInfluential <- function(model, maxCookDistance){
   #ibteg <- as.factor(rowsWithNoInfluentials$ibteg) 
   #k.ar <- rowsWithNoInfluentials$k.ar
   return(
-    lm(nuvirdi ~ ., data=rowsWithNoInfluentials)
+    rowsWithNoInfluentials
   )
 }
+
+
+#removeInfluential <- function(model, maxCookDistance){
+#  diag <- data.table(fortify(model))
+#  rowsWithNoInfluentials <- diag[diag$.cooksd < maxCookDistance,]
+#  rowsWithNoInfluentials <- rowsWithNoInfluentials[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
+  #kdagur <- rowsWithNoInfluentials$kdagur         
+  #nuvirdi <- rowsWithNoInfluentials$nuvirdi        
+  #teg_eign <- as.factor(rowsWithNoInfluentials$teg_eign)      
+  #byggar <- rowsWithNoInfluentials$byggar         
+  #haednr <- rowsWithNoInfluentials$haednr        
+  #lyfta <- rowsWithNoInfluentials$lyfta       
+  #ibm2  <- rowsWithNoInfluentials$ibm2         
+  #fjhaed <- rowsWithNoInfluentials$fjhaed    
+  #fjbilast  <- rowsWithNoInfluentials$fjbilast    
+  #fjbkar  <- rowsWithNoInfluentials$fjbkar
+  #fjsturt <- rowsWithNoInfluentials$fjsturt
+  #fjklos  <- rowsWithNoInfluentials$fjklos 
+  #fjeld  <- rowsWithNoInfluentials$fjeld    
+  #fjherb  <- rowsWithNoInfluentials$fjherb
+  #fjstof  <- rowsWithNoInfluentials$fjstof    
+  #fjgeym  <- rowsWithNoInfluentials$fjgeym     
+  #stig10  <- rowsWithNoInfluentials$stig10   
+  #ibteg <- as.factor(rowsWithNoInfluentials$ibteg) 
+  #k.ar <- rowsWithNoInfluentials$k.ar
+#  return(
+#    lm(nuvirdi ~ ., data=rowsWithNoInfluentials)
+#  )
+#}
+
 
 
 QQplotResiduals <- function(model){
