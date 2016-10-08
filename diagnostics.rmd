@@ -63,19 +63,21 @@ multiplot(fitVsres,QQ,cols = 2)
 Radj.all <- CalculateRadjusted(lm.all, test) # 0.7990392
 ```
 
-First we calculate the R-adjusted for the first model and get $R-adjusted$= `r Radj.all`
+
+First we calculate the R-adjusted for the first model and the whole train data and get $R-adjusted$= `r Radj.all`. The R-squared for this data set and model is, $R-squared$=`r summary(lm.all)$r.squared`
 Now by removing the residuals that have std. residuals $>$ 3 we have new model.
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 ## Tek út punkta með Std. Res > 3
 trainNO <- removeOutliersWStdResMoreThanThree(train)
 lm.allNoOutlier <- lm(nuvirdi ~ . ,data = trainNO)
+sumNO <- summary(lm.allNoOutlier)
 Radj.allNoOutliers <- CalculateRadjusted(lm.allNoOutlier, test) # 0.7328961 # Ottó: 0.7905836
 ```
 
 
 
-The plots below show that the model in instatnly better, just by removing some outliers.
+The plots below show that the model in instatnly better for our train data, just by removing some outliers.
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 ##QQ plot af nýju modeli án Std. Resiudals
@@ -83,18 +85,24 @@ The plots below show that the model in instatnly better, just by removing some o
 fittedNo <- fittedVsresiduals(lm.allNoOutlier)
 QQno <- QQplotResiduals(lm.allNoOutlier) + labs(title="QQ plot no Std res > 3")
 multiplot(fittedNo,QQno,cols = 2)
-Radj.allNoOutliers
+#Radj.allNoOutliers
 ```
 
-We want
+The R-adjusted for fitting the model with new train data is $R-adjusted No outliers$=`r Radj.allNoOutliers` while R-squared for the train data gets better, $R-squared$=`r sumNO$r.squared`
+
+With the Cooks distance we can find the most influential points affecting our model. We want to remove all influential points with Cooks distance $>$ `r 4/n` and see how to model fits to that data.
+
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 
 ## Tek út Influential punkta með Cooks Distnace =4/n
 
-lm.allNoInfluential <- removeInfluential(lm.all,maxCookDistance = 4/n)
+trainNoInflu <- removeInfluential(train,maxCookDistance = 4/n)
+lm.allNoInfluential <- lm(nuvirdi ~ . ,data = trainNoInflu)
+sumNI <- summary(lm.allNoInfluential)
+#sumNI$r.squared
 Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test)# 0.7327364 # 0.7888572
-Radj.allNoInfluential
+#Radj.allNoInfluential
 ```
 
 
@@ -106,6 +114,7 @@ QQnoInf <- QQplotResiduals(lm.allNoInfluential) + labs(title="QQ plot no influen
 multiplot(fittedNoInf,QQnoInf,cols = 2)
 ```
 
+Now our R-adjusted is still worse than for the whole train data, $R-adjusted$= `r Radj.allNoInfluential` while R-squared keeps getting higher $R-squared$=`r sumNI$r.squared`
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 #No influential and no residuals
