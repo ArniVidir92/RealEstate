@@ -174,7 +174,7 @@ removeOutliersWStdResMoreThanThree <- function(dt){
   )
 }
 
-
+#Breytig
 # Þurfum líklega að laga þetta fall
 removeInfluential <- function(dt, maxCookDistance){
   model <- lm(nuvirdi ~ .,data=dt)
