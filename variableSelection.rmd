@@ -1,35 +1,45 @@
 
 # Variable selection
 
-We are now only working with the transformed data from the transformation chapter.
+We saw from the transformation chapter that we got the best models by transforming both the response variable and $ibm2$. So we'll be using those models for variable selection.
 
-```{r}
-trainTransf <- trainBCAllIBM2
-testTransf <- testBCAllIBM2
-trainTransfNO <-trainBCNOIBM2
-testTransfNO <- testBCNOIBM2
+```{r, results='hide'}
+ALL <- GetBCandIBM2ModelAndDt(lm.all,train, test)
+NO <- GetBCandIBM2ModelAndDt(lm.allNoOutlier, trainNO, test)
+NI <- GetBCandIBM2ModelAndDt(lm.allNoInfluential, trainNoInflu, test)
+NONI <- GetBCandIBM2ModelAndDt(lm.allNoInflueNoOutlier, trainNONI, test)
 ```
 
 Lets try to use BIC and AIC criteria to select our variables.
 
-```{r}
-# BIC test
-null <- lm(nuvirdi~1, data = trainTransf)
-full <- lm(nuvirdi~ ., data = trainTransf)
-lm.BIC <- step(null, scope = list(lower=null,upper=full),
-     direction="both", k=log(dim(trainTransf)[1]))
-Radj.BICStep <- CalculateRadjLambda(lm.BIC, testTransf, lambdaAll) # 0.8889675 rétt: 0.8352896
+```{r, results='hide'}
 
-# AIC test
-lm.AIC <- step(null, scope = list(lower=null,upper=full),
-     direction="both", k=2)
-Radj.AICStep <- CalculateRadjLambda(lm.AIC, testTransf, lambdaAll) # 0.889269 # rétt: 0.8360234
+# BIC tests
+ALLBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = ALL$train), ALL$model, ALL$train, ALL$test, ALL$lambda)
+NOBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NO$train), NO$model, NO$train, NO$test, NO$lambda)
+NIBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NI$train), NI$model, NI$train, NI$test, NI$lambda)
+NONIBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NONI$train), NONI$model, NONI$train, NONI$test, NONI$lambda)
+
+# AIC tests
+ALLAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = ALL$train), ALL$model, ALL$train, ALL$test, ALL$lambda)
+NOAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NO$train), NO$model, NO$train, NO$test, NO$lambda)
+NIAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NI$train), NI$model, NI$train, NI$test, NI$lambda)
+NONIAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NONI$train), NONI$model, NONI$train, NONI$test, NONI$lambda)
+
 ```
 
-```{r}
-RadjVector <- data.table()
 
-RadjVector <- c(c("","","","","",""),c(Radj.allBc,Radj.allNOBc,Radj.allBcIBM2,Radj.allNOBcIBM2,Radj.BICStep, Radj.AICStep))
-```
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+     & No changes & No outl. & No infl. & No outl. and no infl.  \\ 
+  \hline
+  $R_{adj(BIC)}$ & $`r ALLBIC$Radj`$ & $`r NOBIC$Radj`$ & $`r NIBIC$Radj`$ & $`r NONIBIC$Radj`$ \\ 
+  \hline
+  $R_{adj(AIC)}$ & $`r ALLAIC$Radj`$ & $`r NOAIC$Radj`$ & $`r NIAIC$Radj`$ & $`r NONIAIC$Radj`$ \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 

@@ -1,17 +1,17 @@
 ## Residuals
 Begin by looking at the residuals from this model
 
-```{r echo=FALSE, message=FALSE, error=FALSE}
+```{r echo=FALSE, message=FALSE, error=FALSE, fig.cap="Indexplot for the residuals."}
 indexPlotResiduals(lm.all)
 ```
 
-Here the blue line represent 2 standard deviation from 0 and green line 3 standard deviation away from 0. To help us identify the possible outliers we mark points 2 sd from 0 with their index.  We clearly see that there are some possible outliers that need further diagnostics.
+Here the blue and green line represent 2 and 3 standard deviations from the mean. We identify those points that are two standard deviations away from the mean. We clearly see that there are some possible outliers that need further diagnostics.
 
 ## Leverages
 
-The next thing to do is looking at the leverages, that is the measure of how far independent variable values of an observation are from those of the other observation.
+The next thing to do is looking at the leverages, that is the measure of how far independent variable values of an observation are from those of the other observation. Figure two marks those points that are more than $\frac{2p}{n}=\frac{2\cdot `r length(summary(lm.all)$coef[,1])`}{`r length(train$nuvirdi)`}\approx 0.05$
 
-```{r echo=FALSE, message=FALSE, error=FALSE}
+```{r echo=FALSE, message=FALSE, error=FALSE, fig.cap="Indexplot of leverages"}
 indexPlotLeverage(lm.all)
 ```
 
@@ -20,13 +20,13 @@ indexPlotLeverage(lm.all)
 
 Studentized residuals are sometimes preferred in residual plots as they have been standardized to have equal variance. They are also a big part in the Jackkiife residulas that follows
 
-```{r echo=FALSE, message=FALSE, error=FALSE}
+```{r echo=FALSE, message=FALSE, error=FALSE, fig.cap="Index plot of the studentized residuals."}
 stres <- indexPlotStResiduals(lm.all)+ylim(-5,20)
 ```
 
-Blue and green line represent as before 2 and 3 sd from zero. 
+Blue and green line represent as before 2 and 3 sd from the mean. 
 
-```{r echo=FALSE, message=FALSE, error=FALSE}
+```{r echo=FALSE, message=FALSE, error=FALSE, fig.cap="Index plot of the jackknive residuals"}
 jackres <- indexPlotJackResiduals(lm.all)+ylim(-5,20)
 ```
  
@@ -97,7 +97,7 @@ With the Cooks distance we can find the most influential points affecting our mo
 
 ## Tek út Influential punkta með Cooks Distnace =4/n
 
-trainNoInflu <- removeInfluential(train,maxCookDistance = 4/n)
+trainNoInflu <- removeInfluential(train,maxCookDistance = 0.05)
 lm.allNoInfluential <- lm(nuvirdi ~ . ,data = trainNoInflu)
 sumNI <- summary(lm.allNoInfluential)
 #sumNI$r.squared
@@ -138,6 +138,6 @@ Radj.allNoInfluentialNoOutlier
 ```
 
 ```{r}
-data.table(Radj.all,Radj.allNoOutliers,Radj.allNoInfluential,Radj.allNONI)
+
 ```
 

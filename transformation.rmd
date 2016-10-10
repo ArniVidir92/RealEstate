@@ -2,67 +2,60 @@
 
 We know that nuvirdi has an unusually heavy tale so we'll start by transforming our response variable using boxcox.
 
-```{r, fig.cap="Boxcox plot for the model and the model without outliers. No outlier plot is on the right", warning=FALSE}
-par(mfrow=c(1,2))
+```{r, echo=FALSE,  fig.cap="Boxcox plot for the four models. Top right - model with all the training data, top left - model with no outliers, bottom right - model with no influential points and bottom left model with no outliers and no influential points.", warning=FALSE}
+par(mfrow=c(2,2))
 boxcox(lm.all)
 boxcox(lm.allNoOutlier)
+boxcox(lm.allNoInfluential)
+boxcox(lm.allNoInflueNoOutlier)
 par(mfrow=c(1,1))
 ```
 
+
+
 ```{r}
-bcAll <- boxcox(lm.all, plotit = FALSE)
-bcNO <- boxcox(lm.allNoOutlier, plotit = FALSE)
-
-# Get the highest value from the boxcox plots
-lambdaAll <- with(bcAll, x[which.max(y)])
-lambdaNO <- with(bcNO, x[which.max(y)])
-
-# Transform the train and test datasets
-trainBCAll <- bcTransF(train, lambdaAll)
-testBCAll <- bcTransF(test, lambdaAll)
-trainBCNO <- bcTransF(trainNO, lambdaNO)
-testBCNO <- bcTransF(test, lambdaNO)
-
-lm.allBc <- lm(nuvirdi ~ ., data = trainBCAll)
-lm.allNoOutlierBc <- lm(nuvirdi ~ ., data = trainBCNO)
-Radj.allBc <- CalculateRadjLambda(lm.allBc, testBCAll, lambdaAll) # 0.8488961 rétt: 0.7643883
-Radj.allNOBc <- CalculateRadjLambda(lm.allNoOutlierBc, testBCNO, lambdaNO)
+Radj.ALLBC <- BCTranformResponseRadj(lm.all, train, test)
+Radj.NOBC <- BCTranformResponseRadj(lm.allNoOutlier, trainNO, test)
+Radj.NIBC <- BCTranformResponseRadj(lm.allNoInfluential, trainNoInflu, test)
+Radj.NONIBC <- BCTranformResponseRadj(lm.allNoInflueNoOutlier, trainNONI, test)
 
 ```
 
-Here we get $R_{adj. full model}=`r Radj.allBc`$ and $R_{adj. NoOutliers}=`r Radj.allNOBc`$ by using the Boxcox method on the response variable. We can see from our ggpairs plot that the explanatory variable $ibm2$ has a heavy tale so lets try to transform that variable as well. Here we use a log transformation for the $ibm2$ variable.
+Here below we can see the $R_{adj}$ for the four models after transforming the response variable. $R_{adj}$ is calculated using the test set.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+     & No changes & No outl. & No infl. & No outl. and no infl.  \\ 
+  \hline
+  $R_{adj}$ & $`r Radj.ALLBC`$ & $`r Radj.NOBC`$ & $`r Radj.NIBC`$ & $`r Radj.NONIBC`$ \\ 
+   \hline
+\end{tabular}
+\end{table}
+
+From the ggpairs image we can see that $ibm2$ has a heavy right tail as well so lets try log-transforming that variable to see if we get better results.
+
 
 ```{r}
 
-# Transform ibm2
-trainBCAllIBM2 <- trainBCAll
-trainBCAllIBM2$ibm2 <- log(trainBCAll$ibm2)
-testBCAllIBM2 <- testBCAll
-testBCAllIBM2$ibm2 <- log(testBCAll$ibm2)
-trainBCNOIBM2 <- trainBCNO
-trainBCNOIBM2$ibm2 <- log(trainBCNO$ibm2)
-testBCNOIBM2 <- testBCNO
-testBCNOIBM2$ibm2 <- log(testBCNO$ibm2)
+Radj.AllBCAndIBM2 <- TransformBCandIBM2(lm.all, train, test)
+Radj.NOBCAndIBM2 <- TransformBCandIBM2(lm.allNoOutlier, train, test)
+Radj.NIBCAndIBM2 <- TransformBCandIBM2(lm.allNoInfluential, trainNoInflu, test)
+Radj.NONIBCAndIBM2 <- TransformBCandIBM2(lm.allNoInflueNoOutlier, trainNONI, test)
 
-lm.allBcIBM2 <- lm(nuvirdi ~ ., data = trainBCAllIBM2)
-lm.allNOBcIBM2 <- lm(nuvirdi ~ ., data = trainBCNOIBM2)
-Radj.allBcIBM2 <- CalculateRadjLambda(lm.allBcIBM2, testBCAllIBM2, lambdaAll) # 0.8880478 rétt: 0.8342736
-Radj.allNOBcIBM2 <- CalculateRadjLambda(lm.allNOBcIBM2, testBCNOIBM2, lambdaNO) 
-
-
-# Geymi hér. Þetta er besta módelið hingað til
-bcBest <- boxcox(lm.best)
-lambdaBest <- with(bcBest, x[which.max(y)])
-trainBCBest <- bcTransF(train, lambdaBest)
-testBCBest <- bcTransF(test, lambdaBest)
-trainBCBestIBM2 <- trainBCBest
-trainBCBestIBM2$ibm2 <- log(trainBCBest$ibm2)
-testBCBestIBM2 <- testBCBest
-testBCBestIBM2$ibm2 <- log(testBCBest$ibm2)
-
-lm.best <- lm(nuvirdi ~ ibm2*matssvaedi+undirmatssvaedi+ibteg+teg_eign+fjeld+k.ar, data = trainBCBestIBM2)
-Radj.best <- CalculateRadjLambda(lm.best, testBCBestIBM2, lambdaBest)
 ```
 
-Here we get a better value for R adjusted. We get $R_{adj. full model}=`r Radj.allBcIBM2`$ for the full model and $R_{adj. NoOutliers}=`r Radj.allNOBcIBM2`$ for the model without outliers.
+Here below we can see the $R_{adj}$ for the four models after transforming the response variable and $ibm2$. $R_{adj}$ is calculated using the test set. Now we get much better results for $R_{adj}$.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+     & No changes & No outl. & No infl. & No outl. and no infl.  \\ 
+  \hline
+  $R_{adj}$ & $`r Radj.AllBCAndIBM2`$ & $`r Radj.NOBCAndIBM2`$ & $`r Radj.NIBCAndIBM2`$ & $`r Radj.NONIBCAndIBM2`$ \\ 
+   \hline
+\end{tabular}
+\end{table}
 

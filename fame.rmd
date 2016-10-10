@@ -22,6 +22,11 @@ output:
     toc_depth: '2' 
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache=TRUE)
+```
+
+
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 # Bara að gera setup ef það þarf
 if(!exists("dt.RE_data")){ source("setUp.R")}
@@ -29,9 +34,9 @@ source("utilz.R")
 source("outliers.R")
 source("transformation.R")
 source("testArni.R")
+source("variableSelection.R")
 
 lm.all <- lm(nuvirdi ~ .,data=train)
-
 ```
 
 
@@ -39,6 +44,7 @@ lm.all <- lm(nuvirdi ~ .,data=train)
 
 ```
 
+\newpage
 
 ```{r child='transformation.rmd'}
 

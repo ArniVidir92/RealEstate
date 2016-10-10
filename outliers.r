@@ -150,25 +150,6 @@ removeOutliersWStdResMoreThanThree <- function(dt){
   diag <- data.table(fortify(model))
   rowsWithNoOutliers <- diag[abs(diag$.stdresid) < 3,]
   rowsWithNoOutliers <- rowsWithNoOutliers[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
-  #kdagur <- rowsWithNoOutliers$kdagur         
-  #nuvirdi <- rowsWithNoOutliers$nuvirdi        
-  #teg_eign <- as.factor(rowsWithNoOutliers$teg_eign)      
-  #byggar <- rowsWithNoOutliers$byggar         
-  #haednr <- rowsWithNoOutliers$haednr        
-  #lyfta <- rowsWithNoOutliers$lyfta       
-  #ibm2  <- rowsWithNoOutliers$ibm2         
-  #fjhaed <- rowsWithNoOutliers$fjhaed    
-  #fjbilast  <- rowsWithNoOutliers$fjbilast    
-  #fjbkar  <- rowsWithNoOutliers$fjbkar
-  #fjsturt <- rowsWithNoOutliers$fjsturt
-  #fjklos  <- rowsWithNoOutliers$fjklos 
-  #fjeld  <- rowsWithNoOutliers$fjeld    
-  #fjherb  <- rowsWithNoOutliers$fjherb
-  #fjstof  <- rowsWithNoOutliers$fjstof    
-  #fjgeym  <- rowsWithNoOutliers$fjgeym     
-  #stig10  <- rowsWithNoOutliers$stig10   
-  #ibteg <- as.factor(rowsWithNoOutliers$ibteg) 
-  #k.ar <- rowsWithNoOutliers$k.ar
   return(
     rowsWithNoOutliers
   )
