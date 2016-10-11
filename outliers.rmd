@@ -19,8 +19,10 @@ fittedVsresiduals <- function(model){
   diag$.index = c(1:length(diag$.resid))
   p<-length(coef(model))
   n<-length(fitted(model))
-  fitVsres <-ggplot(diag, aes(x=.fitted,y=.resid))+geom_point()+ylim(-1.5*max(diag$.resid),1.5*max(diag$.resid))
-  fitVsres <- fitVsres+labs(title="Fitted value against residuals")+ylab("Residuals")+xlab("Fitted value")          
+  fitVsres <-ggplot(diag, aes(x=.fitted,y=.resid))+
+    geom_point()+ylim(-1.5*max(diag$.resid),1.5*max(diag$.resid))
+  fitVsres <- fitVsres+
+    labs(title="Fitted value against residuals")+ylab("Residuals")+xlab("Fitted value")          
 }
 
 
@@ -31,9 +33,15 @@ indexPlotCookdistance <- function(model){
   p <- length(coef(model))
   n <- length(fitted(model))
   cook_index <- ggplot(diag, aes(x=seq(1:length(.cooksd)),y=.cooksd)) 
-  cook_index <- cook_index + geom_point( aes(color = ifelse(abs(.hat)>2*p/n,"blue",ifelse(abs(.stdresid)>2,"red","black"))))
-  cook_index <- cook_index + xlab("Index")+ylab("Cooks distance") + theme(legend.position="none")
-  cook_index <- cook_index + geom_text(aes(label=ifelse(abs(.cooksd)>0.1 | abs(.hat)>2*p/n | abs(.stdresid)>2,.index,"")),hjust=0, vjust=0)
+  cook_index <- cook_index + 
+          geom_point( 
+            aes(color = ifelse(abs(.hat)>2*p/n,"blue",ifelse(abs(.stdresid)>2,"red","black"))))
+  cook_index <- cook_index + xlab("Index")+ylab("Cooks distance") + 
+    theme(legend.position="none")
+  cook_index <- cook_index +  
+    geom_text(
+      aes(label=ifelse(abs(.cooksd)>0.1 | abs(.hat)>2*p/n | abs(.stdresid)>2,.index,"")),
+      hjust=0, vjust=0)
   cook_index
 }
 
@@ -47,8 +55,10 @@ indexPlotResiduals <- function(model){
   res_index <- res_index + geom_hline(yintercept=-2*res_sd, col="blue", linetype="dashed")
   res_index <- res_index + geom_hline(yintercept=3*res_sd, col="green", linetype="dashed")
   res_index <- res_index + geom_hline(yintercept=-3*res_sd, col="green", linetype="dashed")
-  res_index <- res_index + xlab("Index")+ylab("Residuals")+labs(title = "Index plot of residuals")
-  res_index <- res_index + geom_text(aes(label=ifelse(abs(.resid)>2*res_sd,.index,"")),hjust=-.5, vjust=0.4)
+  res_index <- res_index + xlab("Index")+
+    ylab("Residuals")+labs(title = "Index plot of residuals")
+  res_index <- res_index + 
+    geom_text(aes(label=ifelse(abs(.resid)>2*res_sd,.index,"")),hjust=-.5, vjust=0.4)
   res_index
 }
 
@@ -62,8 +72,10 @@ indexPlotStResiduals <- function(model){
   Stres_index <- Stres_index + geom_hline(yintercept=-2*Stres_sd, col="blue", linetype="dashed")
   Stres_index <- Stres_index + geom_hline(yintercept=3*Stres_sd, col="green", linetype="dashed")
   Stres_index <- Stres_index + geom_hline(yintercept=-3*Stres_sd, col="green", linetype="dashed")
-  Stres_index <- Stres_index+xlab("Index")+ylab("Studentized residuals")+labs(title = "Index plot of std. residuals")
-  Stres_index <- Stres_index+geom_text(aes(label=ifelse(abs(.stdresid)>2*Stres_sd,.index,"")),hjust=0, vjust=0)
+  Stres_index <- Stres_index+xlab("Index")+ylab("Studentized residuals")+
+                  labs(title = "Index plot of std. residuals")
+  Stres_index <- Stres_index+
+    geom_text(aes(label=ifelse(abs(.stdresid)>2*Stres_sd,.index,"")),hjust=0, vjust=0)
   Stres_index
 }
 
@@ -83,7 +95,8 @@ removeOutliersWStdResMoreThanThree <- function(dt){
   model <- lm(nuvirdi ~ .,data=dt)
   diag <- data.table(fortify(model))
   rowsWithNoOutliers <- diag[abs(diag$.stdresid) < 3,]
-  rowsWithNoOutliers <- rowsWithNoOutliers[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
+  rowsWithNoOutliers <- 
+    rowsWithNoOutliers[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
   return(
     rowsWithNoOutliers
   )
@@ -95,26 +108,8 @@ removeInfluential <- function(dt, maxCookDistance){
   model <- lm(nuvirdi ~ .,data=dt)
   diag <- data.table(fortify(model))
   rowsWithNoInfluentials <- diag[diag$.cooksd < maxCookDistance,]
-  rowsWithNoInfluentials <- rowsWithNoInfluentials[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
-  #kdagur <- rowsWithNoInfluentials$kdagur         
-  #nuvirdi <- rowsWithNoInfluentials$nuvirdi        
-  #teg_eign <- as.factor(rowsWithNoInfluentials$teg_eign)      
-  #byggar <- rowsWithNoInfluentials$byggar         
-  #haednr <- rowsWithNoInfluentials$haednr        
-  #lyfta <- rowsWithNoInfluentials$lyfta       
-  #ibm2  <- rowsWithNoInfluentials$ibm2         
-  #fjhaed <- rowsWithNoInfluentials$fjhaed    
-  #fjbilast  <- rowsWithNoInfluentials$fjbilast    
-  #fjbkar  <- rowsWithNoInfluentials$fjbkar
-  #fjsturt <- rowsWithNoInfluentials$fjsturt
-  #fjklos  <- rowsWithNoInfluentials$fjklos 
-  #fjeld  <- rowsWithNoInfluentials$fjeld    
-  #fjherb  <- rowsWithNoInfluentials$fjherb
-  #fjstof  <- rowsWithNoInfluentials$fjstof    
-  #fjgeym  <- rowsWithNoInfluentials$fjgeym     
-  #stig10  <- rowsWithNoInfluentials$stig10   
-  #ibteg <- as.factor(rowsWithNoInfluentials$ibteg) 
-  #k.ar <- rowsWithNoInfluentials$k.ar
+  rowsWithNoInfluentials <- 
+    rowsWithNoInfluentials[ ,c(".hat",".sigma",".cooksd",".fitted",".resid",".stdresid") := NULL]
   return(
     rowsWithNoInfluentials
   )

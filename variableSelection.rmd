@@ -37,7 +37,7 @@ NONIAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NONI$train),
 
 ```
 
-We can see that we get the best $R_{adj}$ when using the AIC crite
+We can see that we get the best $R_{adj}$ when using the AIC criteria.
 
 \begin{table}[ht]
 \centering
@@ -163,7 +163,7 @@ The table below shows $R_{adj}$ for the last three steps when using the add1 fun
   \hline
   $R_{adj(add1)Test}$ & $`r Radj.lyfta`$ & $`r Radj.fjsturt`$ & $`r Radj.add1Final`$ \\ 
   \hline
-  $R_{adj(add1)}Train$ & $`r Radj.add1lyftaTrain`$ & $`r Radj.add1fjsturtTrain`$ & $`r Radj.add1FinalTrain`$ \\ 
+  $R_{adj(add1)Train}$ & $`r Radj.add1lyftaTrain`$ & $`r Radj.add1fjsturtTrain`$ & $`r Radj.add1FinalTrain`$ \\ 
    \hline
 \end{tabular}
 \end{table}
@@ -260,5 +260,26 @@ The table below shows the best $R_{adj}$ for each test when we start with differ
   \hline
   $R_{adjTrain}$ & $`r Radj.add1fjsturtTrain`$ & $`r Radj.drfjbkarTrain`$ & $`r RadjAICTrain`$ & $`r RadjBICTrain`$ \\ 
    \hline
+\end{tabular}
+\end{table}
+
+# Results
+
+After diagnosing, transforming and selecting our variables we got the best result using the model below.
+
+$nuvirdi \sim ibm2*matssvaedi+kdagur+teg\_eign+byggar+undirmatssvaedi+haednr+fjhaed+fjbilast+fjstof+lyfta+fjsturt$ 
+
+The $R_{adj}$ for this model on the test set was $R_{adjusted}=0.897562$. We got this model by using all of the data in the training set, transforming both the response variable using boxcox and log transforming the explanatory variable $ibm2$ and then we used forward selection with the add1 function in R. We should add that we tried 3 different random seeds to split our training and testing data and we chose the one seed that gave us the best $R_{adj}$ for the test data. 
+
+The table shows the $R_{adj}$ for the test and train data sets and the random seed used to get the training and testing sets.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrr}
+  \hline
+   Random seed & $R_{adj-Test}$ & $R_{adj-Train}$ \\ 
+  \hline
+  1 & $`r Radj.fjsturt`$ & $`r Radj.add1fjsturtTrain`$ \\
+  \hline
 \end{tabular}
 \end{table}

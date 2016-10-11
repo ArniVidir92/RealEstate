@@ -113,7 +113,7 @@ With the Cooks distance we can find the most influential points affecting our mo
 
 ## Tek út Influential punkta með Cooks Distnace =4/n
 
-trainNoInflu <- removeInfluential(train,maxCookDistance = 0.05)
+trainNoInflu <- removeInfluential(train,maxCookDistance = 4/dim(train)[1])
 lm.allNoInfluential <- lm(nuvirdi ~ . ,data = trainNoInflu)
 sumNI <- summary(lm.allNoInfluential)
 #sumNI$r.squared

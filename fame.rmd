@@ -75,3 +75,4 @@ lm.all <- lm(nuvirdi ~ .,data=train)
 ```{r child='variableSelectionR.rmd'}
 
 ```
+

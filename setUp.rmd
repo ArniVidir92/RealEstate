@@ -32,9 +32,11 @@ dt.RE_data <- dt.RE_data[,teg_eign:=as.factor(teg_eign)]
 
 
 # Byrjum á að taka út þær breytur sem við teljum ekki  
-dt.RE_data <- subset(dt.RE_data, select=c("kdagur","nuvirdi","teg_eign","byggar","haednr","lyfta","ibm2","fjhaed",
-                                          "fjbilast","fjbkar","fjsturt","fjklos","fjeld","fjherb",
-                                          "fjstof","fjgeym","stig10","matssvaedi","undirmatssvaedi","ibteg","k.ar"))
+dt.RE_data <- 
+  subset(dt.RE_data, 
+        select=c("kdagur","nuvirdi","teg_eign","byggar","haednr","lyfta","ibm2","fjhaed",
+                 "fjbilast","fjbkar","fjsturt","fjklos","fjeld","fjherb",
+                "fjstof","fjgeym","stig10","matssvaedi","undirmatssvaedi","ibteg","k.ar"))
 
 dt.RE_data <- dt.RE_data[,kdagur:=as.Date(kdagur)]
 
