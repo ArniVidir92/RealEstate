@@ -16,15 +16,22 @@ Lets try to use BIC and AIC criteria to select our variables.
 ```{r, results='hide'}
 
 # BIC tests
-ALLBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = ALL$train), ALL$model, ALL$train, ALL$test, ALL$lambda)
-NOBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NO$train), NO$model, NO$train, NO$test, NO$lambda)
-NIBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NI$train), NI$model, NI$train, NI$test, NI$lambda)
-NONIBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NONI$train), NONI$model, NONI$train, NONI$test, NONI$lambda)
+ALLBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = ALL$train), 
+                           ALL$model, ALL$train, ALL$test, ALL$lambda)
+NOBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NO$train), 
+                          NO$model, NO$train, NO$test, NO$lambda)
+NIBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NI$train), 
+                          NI$model, NI$train, NI$test, NI$lambda)
+NONIBIC <- findBestBICModel(lm(nuvirdi ~ 1, data = NONI$train), 
+                            NONI$model, NONI$train, NONI$test, NONI$lambda)
 
 # AIC tests
-ALLAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = ALL$train), ALL$model, ALL$train, ALL$test, ALL$lambda)
-NOAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NO$train), NO$model, NO$train, NO$test, NO$lambda)
-NIAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NI$train), NI$model, NI$train, NI$test, NI$lambda)
+ALLAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = ALL$train), 
+                           ALL$model, ALL$train, ALL$test, ALL$lambda)
+NOAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NO$train), 
+                          NO$model, NO$train, NO$test, NO$lambda)
+NIAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NI$train), 
+                          NI$model, NI$train, NI$test, NI$lambda)
 NONIAIC <- findBestAICModel(lm(nuvirdi ~ 1, data = NONI$train), NONI$model, NONI$train, NONI$test, NONI$lambda)
 
 ```
