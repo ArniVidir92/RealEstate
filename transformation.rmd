@@ -2,7 +2,7 @@
 
 We know that nuvirdi has an unusually heavy tale so we'll start by transforming our response variable using boxcox.
 
-```{r, echo=FALSE,  fig.cap="Boxcox plot for the four models. Top right - model with all the training data, top left - model with no outliers, bottom right - model with no influential points and bottom left model with no outliers and no influential points.", warning=FALSE}
+```{r, echo=FALSE,  fig.cap="Boxcox plot for the four models. Top right: Model with all the training data, top left: Model with no outliers, bottom right: Model with no influential points and bottom left: Model with no outliers and no influential points.", warning=FALSE}
 par(mfrow=c(2,2))
 boxcox(lm.all)
 boxcox(lm.allNoOutlier)

@@ -52,7 +52,7 @@ dt.RE_data <- dt.RE_data[,ibteg:=as.factor(ibteg)]
 n<-dim(dt.RE_data)[1]
 
 # Training and testing data sets
-set.seed(5)
+set.seed(1)
 rows<-sample(1:n,n/3)
 train <- data.table(dt.RE_data[-rows,])
 test <- data.table(dt.RE_data[rows,])
