@@ -83,35 +83,35 @@ Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda)
 # Adding undirmatssvaedi
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8519097
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Adding haednr
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8537324
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Adding fjhaed
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr+fjhaed, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8548856
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Adding fjbilast
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr+fjhaed+fjbilast, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8560273
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Adding fjstof
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr+fjhaed+fjbilast+fjstof, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8584003
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # adding lyfta
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr+fjhaed+fjbilast+fjstof+lyfta, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.lyfta <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8584125
+Radj.lyfta <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # adding fjsturt
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr+fjhaed+fjbilast+fjstof+lyfta+fjsturt, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.fjsturt <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8599631
+Radj.fjsturt <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # adding stig10
 lm.temp <- lm(nuvirdi~ibm2*matssvaedi+kdagur+teg_eign+byggar+undirmatssvaedi+haednr+fjhaed+fjbilast+fjstof+lyfta+fjsturt+stig10, data = ALL$train)
 add1(lm.temp,~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb ,data=ALL$train, test = "F")
-Radj.add1Final <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8585105
+Radj.add1Final <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 ```
 
 The table below shows $R_{adj}$ for the last three steps when using the add1 function.
@@ -127,7 +127,8 @@ The table below shows $R_{adj}$ for the last three steps when using the add1 fun
 \end{tabular}
 \end{table}
 
-After using the add1 function until there was no significant explanatory variable left we got $R_{adj}=`r Radj.add1Final`$. Lets try using drop1 instead.
+After using the add1 function until there was no significant explanatory variable left we got $R_{adj}=`r Radj.add1Final`$. 
+Lets try using drop1 instead with different intercept and slope for matsvaedi.
 
 ```{r, results='hide'}
 lm.temp <- lm(nuvirdi ~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+k.ar+byggar+lyfta+fjklos+fjeld+fjherb, data = ALL$train)
@@ -140,23 +141,23 @@ Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda)
 # Dropping fjklos
 lm.temp <- lm(nuvirdi ~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+byggar+lyfta+fjeld+fjherb, data = ALL$train)
 drop1(lm.temp, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8578069
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Dropping fjeld
 lm.temp <- lm(nuvirdi ~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+ibteg+byggar+lyfta+fjherb, data = ALL$train)
 drop1(lm.temp, test = "F")
-Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8573713
+Radj.temp <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Dropping ibteg
 lm.temp <- lm(nuvirdi ~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+byggar+lyfta+fjherb, data = ALL$train)
 drop1(lm.temp, test = "F")
-Radj.drIbteg <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8575344
+Radj.drIbteg <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Dropping fjherb
 lm.temp <- lm(nuvirdi ~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+fjbkar+byggar+lyfta, data = ALL$train)
 drop1(lm.temp, test = "F")
-Radj.drfjherb <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8580301
+Radj.drfjherb <- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 # Dropping fjbkar
 lm.temp <- lm(nuvirdi ~ ibm2*matssvaedi + kdagur + teg_eign + undirmatssvaedi + haednr + fjhaed+fjstof+byggar+fjsturt+stig10+fjbilast+byggar+lyfta, data = ALL$train)
 drop1(lm.temp, test = "F")
-Radj.drfjbkar<- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) # 0.8585105
+Radj.drfjbkar<- CalculateRadjLambda(lm.temp, ALL$test, ALL$lambda) 
 ```
 
 Table below shows $R_{adj}$ for the last three steps when using the drop1 function.
@@ -184,3 +185,15 @@ ALLBIC <- findBestBICModel(null, full, ALL$train, ALL$test, ALL$lambda)
 ALLAIC <- findBestAICModel(null, full, ALL$train, ALL$test, ALL$lambda)
 ```
 
+The table below shows the best $R_{adj}$ for each test when we start with different intercepts for matssvaedi.
+
+\begin{table}[ht]
+\centering
+\begin{tabular}{rrrrr}
+  \hline
+     & add1 & drop1 & AIC & BIC  \\ 
+  \hline
+  $R_{adj}$ & $`r ALLBIC$Radj`$ & $`r ALLBIC$Radj`$ & $`r ALLAIC$Radj`$ & $`r ALLBIC$Radj`$ \\ 
+   \hline
+\end{tabular}
+\end{table}
