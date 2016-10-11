@@ -16,11 +16,6 @@ CalculateRadjLambda <- function(model, dt, lambda){
   return(Radjusted)
 }
 
-##' @title bcTransF
-##' @param dt DataTable that includes the column nuvirdi
-##' @param lambda Is the x value of the highest point in a boxcox plot for lm(nuvirdi ~ ., data=dt)
-##' @return dt with the nuvirdi column transformed
-##' @author Árni og Ottó
 bcTransF <- function(dt, lambda){
   dt$nuvirdi <- yjPower(dt$nuvirdi, lambda)
   return(dt)
