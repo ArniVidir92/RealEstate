@@ -1,3 +1,10 @@
+## The model
+
+In the description of this project, we are asked to make a model to evaluate houseprices(nuvirdi) in Reykjavik. The first step is usually to model the price as a function of all other explanatory variables and work from there.That is
+$$ y_{nuvirdi} = \beta_1 x_{kaupdagur} + \dots  $$
+
+We will be doing our diagnostics with respect to this model.
+
 ## Residuals
 Begin by looking at the residuals from this model
 
@@ -15,7 +22,8 @@ The next thing to do is looking at the leverages, that is the measure of how far
 indexPlotLeverage(lm.all)
 ```
 
-
+\newpage
+ 
 ## Studentized residuals
 
 Studentized residuals are sometimes preferred in residual plots as they have been standardized to have equal variance. They are also a big part in the Jackkiife residulas that follows
@@ -34,11 +42,19 @@ jackres <- indexPlotJackResiduals(lm.all)+ylim(-5,20)
 multiplot(stres,jackres,cols = 2)
 ```
 
+\newpage
+
+## Cook's distance
+
 Cook's distance (calculated w.r.t Jackknife and Std.Residuals) is a good way to diagnose influential points in the model. Points with high Cooks distance are affecting the model more than the others. The green points have high Cooks distance, but the blue points have high Cooks distance but also high leverage.
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
 indexPlotCookdistance(lm.all)
 ```
+
+\newpage
+
+## Q-Q plot and fitted plot
 
 To see how well the model fits the data, we plot the fitted value against residuals. This should be scatterplot with no specified form.
 
@@ -50,7 +66,7 @@ We clearly see this is not what we expected to see. Also the QQ plot This means 
 
   
 ```{r echo=FALSE, message=FALSE, error=FALSE}
-QQ <- QQplotResiduals(lm.all) + labs(title="QQ plot of train data")
+QQ <- QQplotResiduals(lm.all) + labs(title="Q-Q plot for train data")
 ```
 
 ```{r echo=FALSE, message=FALSE, error=FALSE}
@@ -83,7 +99,7 @@ The plots below show that the model in instatnly better for our train data, just
 ##QQ plot af nýju modeli án Std. Resiudals
 
 fittedNo <- fittedVsresiduals(lm.allNoOutlier)
-QQno <- QQplotResiduals(lm.allNoOutlier) + labs(title="QQ plot no Std res > 3")
+QQno <- QQplotResiduals(lm.allNoOutlier) + labs(title="Q-Q plot no Std.Residuals > 3")
 multiplot(fittedNo,QQno,cols = 2)
 #Radj.allNoOutliers
 ```
@@ -110,7 +126,7 @@ Radj.allNoInfluential <- CalculateRadjusted(lm.allNoInfluential, test)# 0.732736
 ## QQ plot and Fitted of No Influential
 
 fittedNoInf <- fittedVsresiduals(lm.allNoInfluential)
-QQnoInf <- QQplotResiduals(lm.allNoInfluential) + labs(title="QQ plot no influential")
+QQnoInf <- QQplotResiduals(lm.allNoInfluential) + labs(title="Q-Q plot with no influential points")
 multiplot(fittedNoInf,QQnoInf,cols = 2)
 ```
 
@@ -130,11 +146,11 @@ Radj.allNONI <- CalculateRadjusted(lm.allNoInflueNoOutlier, test)
 ##QQ plot of no influentiial points and 
 
 fittedNoInfNoOut <- fittedVsresiduals(lm.allNoInflueNoOutlier)
-QQNoInfNoOut <- QQplotResiduals(lm.allNoInflueNoOutlier) + labs(title="QQ plot no inf no std res > 3")
+QQNoInfNoOut <- QQplotResiduals(lm.allNoInflueNoOutlier) + labs(title="Q-Q plot with no inflential poits or Std.res > 3")
 multiplot(fittedNoInfNoOut,QQNoInfNoOut,cols = 2)
 
 Radj.allNoInfluentialNoOutlier <- CalculateRadjusted(lm.allNoInflueNoOutlier, test)
-Radj.allNoInfluentialNoOutlier
+#Radj.allNoInfluentialNoOutlier
 ```
 
 

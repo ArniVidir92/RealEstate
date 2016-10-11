@@ -1,4 +1,7 @@
-# Þessi skrá sér um að fjarlægja þá dálka sem við þurfum ekki í módelinu
+# Appendix
+
+```{r eval=FALSE, echo=TRUE, message=FALSE, warning=FALSE}
+
 library(MASS)
 library(ggplot2)
 library(plyr)
@@ -93,3 +96,6 @@ multiplot <- function(..., plotlist=NULL, file, cols=1, layout=NULL) {
     }
   }
 }
+
+```
+

@@ -1,7 +1,7 @@
 --- 
-title: "Frame5"
-author: Ottó Hólm Reynisson
-date: 15.september 2016
+title: "Verkefni 5"
+author: Árni Víðir Jóhannesson & Ottó Hólm Reynisson
+date: 11.október 2016
 subject: null
 header-includes: 
    - \usepackage{longtable} 
@@ -37,6 +37,7 @@ source("testArni.R")
 source("variableSelection.R")
 
 lm.all <- lm(nuvirdi ~ .,data=train)
+
 ```
 
 
@@ -50,8 +51,27 @@ lm.all <- lm(nuvirdi ~ .,data=train)
 
 ```
 
+\newpage
 
 ```{r child='variableSelection.rmd'}
 
 ```
 
+
+\newpage
+
+```{r child='setUp.rmd'}
+
+```
+
+```{r child='outliers.rmd'}
+
+```
+
+```{r child='radjusted.rmd'}
+
+```
+
+```{r child='variableSelectionR.rmd'}
+
+```
