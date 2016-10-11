@@ -193,7 +193,7 @@ The table below shows the best $R_{adj}$ for each test when we start with differ
   \hline
      & add1 & drop1 & AIC & BIC  \\ 
   \hline
-  $R_{adj}$ & $`r ALLBIC$Radj`$ & $`r ALLBIC$Radj`$ & $`r ALLAIC$Radj`$ & $`r ALLBIC$Radj`$ \\ 
+  $R_{adj}$ & $`r Radj.fjsturt`$ & $`r Radj.drfjbkar`$ & $`r ALLAIC$Radj`$ & $`r ALLBIC$Radj`$ \\ 
    \hline
 \end{tabular}
 \end{table}

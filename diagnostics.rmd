@@ -137,7 +137,4 @@ Radj.allNoInfluentialNoOutlier <- CalculateRadjusted(lm.allNoInflueNoOutlier, te
 Radj.allNoInfluentialNoOutlier
 ```
 
-```{r}
-
-```
 
